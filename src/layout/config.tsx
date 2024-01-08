@@ -1,35 +1,15 @@
-import {
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
+import getMenuItem from "@/utils/getMenuItem";
 
 const menuItems = [
-  {
-    key: "/timetable",
-    icon: <UserOutlined />,
-    label: "课程表",
-  },
-  {
-    key: "/resume",
-    icon: <VideoCameraOutlined />,
-    label: "简历管理",
-  },
-  {
-    key: "/files",
-    icon: <UploadOutlined />,
-    label: "文件收藏",
-  },
-  {
-    key: "/target",
-    icon: <UploadOutlined />,
-    label: "目标管理",
-  },
-  {
-    key: "/link",
-    icon: <UploadOutlined />,
-    label: "常用链接",
-  },
+  getMenuItem("课程表", "timetable", <UserOutlined />),
+  getMenuItem("我的简历", "resume", <UserOutlined />, [
+    getMenuItem("简历制作", "resume/edit", <UserOutlined />),
+    getMenuItem("简历列表", "resume/list", <UserOutlined />),
+  ]),
+  getMenuItem("文件收藏", "files", <UserOutlined />),
+  getMenuItem("目标管理", "target", <UserOutlined />),
+  getMenuItem("常用链接", "link", <UserOutlined />),
 ];
 
 export default menuItems;
