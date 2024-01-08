@@ -8,6 +8,8 @@ import Resume from "@/pages/Resume";
 import Files from "@/pages/Files";
 import Target from "@/pages/Target";
 import Link from "@/pages/Link";
+import ResumeEdit from "@/pages/Resume/Edit";
+import ResumeList from "@/pages/Resume/List";
 
 const routes: RouteObject[] = [
   {
@@ -19,8 +21,17 @@ const routes: RouteObject[] = [
         element: <Timetable />,
       },
       {
-        path: "/resume",
         element: <Resume />,
+        children: [
+          {
+            path: "/resume/edit",
+            element: <ResumeEdit />,
+          },
+          {
+            path: "/resume/list",
+            element: <ResumeList />,
+          },
+        ],
       },
       {
         path: "/files",

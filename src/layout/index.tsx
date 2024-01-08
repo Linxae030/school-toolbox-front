@@ -21,11 +21,9 @@ const AppLayout: React.FC = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["/timetable"]}
           items={menuItems}
-          onClick={(item) => {
-            navigate(item.key);
-          }}
+          onClick={(item) => navigate(item.key)}
         />
       </Sider>
       <Layout>

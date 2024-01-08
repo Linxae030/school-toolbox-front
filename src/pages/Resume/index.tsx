@@ -1,7 +1,12 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 const Resume = () => {
-  return <div>Resume</div>;
+  return (
+    <>
+      <Outlet></Outlet>
+    </>
+  );
 };
 
 export default Resume;
