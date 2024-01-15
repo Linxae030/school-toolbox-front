@@ -4,6 +4,7 @@ import { Layout, Menu, Button, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import menuItems from "./config";
+import "./index.less";
 
 const { Header, Sider, Content } = Layout;
 
@@ -15,7 +16,7 @@ const AppLayout: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Layout>
+    <Layout className="layout-container">
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
@@ -44,6 +45,7 @@ const AppLayout: React.FC = () => {
             margin: "24px 16px",
             padding: 24,
             minHeight: 280,
+            overflow: "auto",
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
