@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import menuItems from "./config";
 import "./index.less";
@@ -10,6 +10,10 @@ const { Header, Sider, Content } = Layout;
 
 const AppLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  const defaultSelectedKeys = location.pathname;
+  const defaultOpenKeys = `/${defaultSelectedKeys.split("/")[1]}`;
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -22,7 +26,8 @@ const AppLayout: React.FC = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["/timetable"]}
+          defaultSelectedKeys={[defaultSelectedKeys]}
+          defaultOpenKeys={[defaultOpenKeys]}
           items={menuItems}
           onClick={(item) => navigate(item.key)}
         />

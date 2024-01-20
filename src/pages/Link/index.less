@@ -2,14 +2,22 @@
   &-container {
     position: relative;
     display: flex;
+    flex-direction: column;
 
-    .anchor {
-      position: fixed;
+    .operation-buttons {
+      margin-bottom: 20px;
     }
 
-    .part-item-container {
-      margin-left: 100px;
-      width: 100%;
+    .main-area {
+      .anchor {
+        position: fixed;
+        width: 100px;
+      }
+
+      .part-item-container {
+        margin-left: 100px;
+      }
     }
+
   }
 }
