@@ -23,6 +23,13 @@ module.exports = {
     "import/no-extraneous-dependencies": "off",
     "import/no-unresolved": "off",
     "import/extensions": "off",
+    "no-unused-vars":"off",
+    "class-methods-use-this":"off",
+    "@typescript-eslint/no-unused-vars":"warn",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-console":"off",
+    "block-no-empty": "off",
+    "no-param-reassign": "off"
   },
 };
 

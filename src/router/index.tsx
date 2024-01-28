@@ -1,5 +1,4 @@
 import { RouteObject } from "react-router-dom";
-
 import AppLayout from "@/layout";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
@@ -10,6 +9,7 @@ import Target from "@/pages/Target";
 import Link from "@/pages/Link";
 import ResumeEdit from "@/pages/Resume/Edit";
 import ResumeList from "@/pages/Resume/List";
+import SignUp from "@/pages/SignUp";
 
 const routes: RouteObject[] = [
   {
@@ -50,6 +50,10 @@ const routes: RouteObject[] = [
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
   },
   {
     path: "*",
