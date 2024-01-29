@@ -6,7 +6,11 @@ import type {
   CustomInsConfig,
   CustomSingleConfig,
 } from "./types";
-import { getLocalStorageItem } from "@/utils";
+import {
+  TOKEN_NAME_IN_LOCAL,
+  getLocalStorageItem,
+  removeLocalStorageItem,
+} from "@/utils";
 
 export default class AxiosApi {
   instance: AxiosInstance;
@@ -33,7 +37,7 @@ export default class AxiosApi {
     // 所有实例的请求拦截器
     this.instance.interceptors.request.use(
       (config) => {
-        const token = getLocalStorageItem("access_token");
+        const token = getLocalStorageItem(TOKEN_NAME_IN_LOCAL);
         config.headers.Authorization = `Bearer ${token}`;
         return config;
       },
@@ -47,7 +51,13 @@ export default class AxiosApi {
         return res.data;
       },
       (err) => {
-        return err.response.data;
+        const receivedData = err.response.data;
+        const { code, status } = receivedData;
+        console.log("err", err);
+        if (code === 0 && status === 401) {
+          removeLocalStorageItem(TOKEN_NAME_IN_LOCAL);
+        }
+        return receivedData;
       },
     );
   }

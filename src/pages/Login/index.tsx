@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginPayLoad } from "@/apis/user/types";
 import useStore from "@/store";
-import { setLocalStorageItem } from "@/utils";
+import { TOKEN_NAME_IN_LOCAL, setLocalStorageItem } from "@/utils";
 
 const Login = () => {
   const { loginStore, userStore } = useStore();
@@ -17,7 +17,7 @@ const Login = () => {
     if (code === 1) {
       const { data, msg } = res;
       const { token, nickname } = data;
-      setLocalStorageItem("access_token", token);
+      setLocalStorageItem(TOKEN_NAME_IN_LOCAL, token);
       userStore.setNickname(nickname);
       navigate("/timetable");
       message.success(msg);

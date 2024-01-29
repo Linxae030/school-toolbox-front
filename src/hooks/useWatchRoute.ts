@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { message } from "antd";
-import { getLocalStorageItem } from "@/utils";
+import { TOKEN_NAME_IN_LOCAL, getLocalStorageItem } from "@/utils";
 
 export default function useWatchRoutes() {
   const previousPath = useRef("");
   const location = useLocation();
   const navigate = useNavigate();
-  const token = getLocalStorageItem("access_token");
+  const token = getLocalStorageItem(TOKEN_NAME_IN_LOCAL);
   const path = location.pathname;
   useEffect(() => {
     if (!token) {

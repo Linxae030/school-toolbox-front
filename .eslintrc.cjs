@@ -29,7 +29,8 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "no-console":"off",
     "block-no-empty": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "import/prefer-default-export":"off"
   },
 };
 

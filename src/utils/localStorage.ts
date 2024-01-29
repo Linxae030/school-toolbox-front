@@ -9,3 +9,7 @@ export function getLocalStorageItem(key: string) {
 export function clearLocalStorage() {
   localStorage?.clear?.();
 }
+
+export function removeLocalStorageItem(key: string) {
+  localStorage.removeItem(key);
+}

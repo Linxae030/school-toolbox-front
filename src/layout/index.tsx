@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { observer } from 'mobx-react-lite';
+import { observer } from "mobx-react-lite";
 import menuItems from "./config";
 import "./index.less";
 import useStore from "@/store";
@@ -19,14 +19,13 @@ const AppLayout: React.FC = observer(() => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const { userStore } = useStore()
+  const { userStore } = useStore();
   const navigate = useNavigate();
 
-  const { nickname } = userStore
+  const { nickname } = userStore;
   useEffect(() => {
     userStore.initUserProfile();
-  }, [])
-
+  }, []);
 
   return (
     <Layout className="layout-container">

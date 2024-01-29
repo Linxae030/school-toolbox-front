@@ -1,5 +1,10 @@
 import LinRequest from "../index";
-import type { LoginPayLoad, LoginRes, ProfilePayRes, SignUpPayLoad } from "./types";
+import type {
+  LoginPayLoad,
+  LoginRes,
+  ProfilePayRes,
+  SignUpPayLoad,
+} from "./types";
 
 export const getUserProfile = () => {
   return LinRequest.post<ProfilePayRes>("auth/profile");
