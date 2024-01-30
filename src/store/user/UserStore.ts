@@ -22,7 +22,6 @@ export default class UserStore {
       const { nickname } = data;
       runInAction(() => {
         this.nickname = nickname;
-        console.log("set", this.nickname);
       });
     } else {
       message.error(res.ret);

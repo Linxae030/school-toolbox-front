@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { AxiosResponse, HttpStatusCode, AxiosRequestConfig } from "axios";
 
 export interface CommonSuccessResponse<T = Record<string, any>> {
@@ -18,7 +16,9 @@ export interface CommonFailResponse {
   path: string;
 }
 
-export type CommonResponse<T> = CommonSuccessResponse<T> | CommonFailResponse;
+export type CommonResponse<T = any> =
+  | CommonSuccessResponse<T>
+  | CommonFailResponse;
 
 // 响应拦截器默认采用AxiosResponse类型，如传入
 export interface CustomInsInterceptors<T = any> {

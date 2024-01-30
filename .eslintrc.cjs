@@ -30,7 +30,9 @@ module.exports = {
     "no-console":"off",
     "block-no-empty": "off",
     "no-param-reassign": "off",
-    "import/prefer-default-export":"off"
+    "import/prefer-default-export":"off",
+    "no-underscore-dangle": "off",
+    "no-nested-ternary": "off"
   },
 };
 

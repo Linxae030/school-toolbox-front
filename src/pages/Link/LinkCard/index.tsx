@@ -12,7 +12,7 @@ const gridStyle: React.CSSProperties = {
 const LinkCard = (props: IProps) => {
   const { title } = props;
   return (
-    <Card id="part-1" title={title} extra={<a>添加链接</a>}>
+    <Card id={`#${title}`} title={title} extra={<a>添加链接</a>}>
       <Card.Grid style={gridStyle}>Content</Card.Grid>
     </Card>
   );

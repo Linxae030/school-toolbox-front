@@ -1,41 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./index.less";
-import { Anchor, Button } from "antd";
+import { Anchor, Button, Form, Input, Modal } from "antd";
+import { observer } from "mobx-react-lite";
 import LinkCard from "./LinkCard";
+import useStore from "@/store";
+import { ensureArray, handleResponse, wait } from "@/utils";
+import { useFormModal } from "@/components/Modal";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Link = () => {
+type FieldType = {
+  cateName?: string;
+};
+
+const Link = observer(() => {
+  const { linkStore } = useStore();
+  const { cates, createCateOpr } = linkStore;
+  const navigate = useNavigate()
+  const location = useLocation()
+  useEffect(() => {
+    linkStore.findAllCateOpr();
+  }, []);
+
+  const [handler] = useFormModal<FieldType>();
+
   return (
-    <div className="link-container" style={{ padding: "20px" }}>
+    <div id="link-c" className="link-container" style={{ padding: "20px" }}>
       <div className="operation-buttons">
-        <Button type="primary">添加分类</Button>
+        <Button
+          type="primary"
+          onClick={() =>
+            handler.open({
+              modalProps: {
+                title: "添加分类",
+                onOk: async (values) => {
+                  const { cateName } = values;
+                  await createCateOpr({ name: cateName ?? "" });
+                  await wait(1);
+                  // TODO: 别这么刷新
+                  window.location.reload();
+                },
+              },
+              formChildren: (
+                <Form>
+                  <Form.Item name="cateName">
+                    <Input placeholder="请输入分类名" />
+                  </Form.Item>
+                </Form>
+              ),
+              initialValue: {},
+            })
+          }
+        >
+          添加分类
+        </Button>
       </div>
       <div className="main-area">
         <Anchor
           rootClassName="anchor"
-          items={[
-            {
-              key: "part-1",
-              href: "#part-1",
-              title: "学习链接",
-            },
-            {
-              key: "part-2",
-              href: "#part-2",
-              title: "学校链接",
-            },
-            {
-              key: "part-3",
-              href: "#part-3",
-              title: "工作链接",
-            },
-          ]}
+          items={ensureArray(cates).map((cate) => {
+            const { _id, name } = cate;
+            return {
+              key: _id,
+              href: `#${_id}`,
+              title: name,
+            };
+          })}
         />
         <div className="part-item-container">
-          <LinkCard title="学习链接" bordered={false} />
+          {ensureArray(cates).map((cate) => (
+            <LinkCard key={cate._id} title={cate.name} bordered={false} />
+          ))}
         </div>
       </div>
     </div>
   );
-};
+});
 
 export default Link;
