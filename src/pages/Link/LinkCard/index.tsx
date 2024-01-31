@@ -59,8 +59,8 @@ const LinkCard = memo((props: IProps) => {
 
   const [isEditLink, setIsEditLink] = useState(false);
 
-  const [linkFormModalHandler] = useFormModal<LinkItemFieldType>();
-  const [cateFormModalHandler] = useFormModal<CateFieldType>();
+  const linkFormModalHandler = useFormModal<LinkItemFieldType>();
+  const cateFormModalHandler = useFormModal<CateFieldType>();
 
   /** 创建链接 */
   const handleCreateLink = async (values: LinkItemFieldType) => {

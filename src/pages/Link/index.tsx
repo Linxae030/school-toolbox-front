@@ -20,7 +20,7 @@ const Link = observer(() => {
     linkStore.findAllCateOpr();
   }, [linkStore]);
 
-  const [formModalHandler] = useFormModal<FieldType>();
+  const formModalHandler = useFormModal<FieldType>();
 
   const handleCreateCate = async (name: string) => {
     await createCateOpr({ name });

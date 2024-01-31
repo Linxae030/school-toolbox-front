@@ -104,7 +104,7 @@ export const FormModal = memo(
 
 export function useFormModal<T = any>() {
   const modalRef = useRef<FormModalExposeHandler>();
-  const handle = useMemo(() => {
+  const handler = useMemo(() => {
     return {
       open: (config: FormModalConfig<T>) => {
         const { initialValue, modalProps, formChildren } = config;
@@ -141,5 +141,5 @@ export function useFormModal<T = any>() {
     };
   }, []);
 
-  return [handle] as const;
+  return handler;
 }

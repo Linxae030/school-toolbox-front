@@ -27,7 +27,7 @@ const LinkItem = memo((props: IProps) => {
   const { bgColor, name, direction, displayMode, isEditLink, _id } = props;
 
   const { linkStore } = useStore();
-  const [formModalHandler] = useFormModal<FieldType>();
+  const formModalHandler = useFormModal<FieldType>();
   const navigate = useNavigate();
 
   const { deleteLinkOpr, updateLinkOpr } = linkStore;
