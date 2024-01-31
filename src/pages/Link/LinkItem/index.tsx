@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import "./index.less";
 import * as cx from "classnames";
 import { CloseCircleFilled, EditFilled } from "@ant-design/icons";
@@ -23,15 +23,14 @@ type IProps = WithMongoId<Link> & {
   isEditLink: boolean;
 };
 
-const LinkItem = (props: IProps) => {
+const LinkItem = memo((props: IProps) => {
   const { bgColor, name, direction, displayMode, isEditLink, _id } = props;
 
-  const { linkStore, userStore } = useStore();
+  const { linkStore } = useStore();
   const [formModalHandler] = useFormModal<FieldType>();
   const navigate = useNavigate();
 
   const { deleteLinkOpr, updateLinkOpr } = linkStore;
-  const { account } = userStore;
 
   // 是否只展示首字符
   const isFirstChar = displayMode === LinkIconDisplayModeEnum.FirstChar;
@@ -42,15 +41,16 @@ const LinkItem = (props: IProps) => {
   // 取首字符
   const truncatedName = isFirstChar ? name.charAt(0) : name;
 
+  /** 打开指向链接 */
   const openLink = () => {
     window.open(formatDirection(direction), "_blank");
   };
-
+  /** 删除链接 */
   const handleDeleteLink = async () => {
     await deleteLinkOpr(_id);
     waitAndRefreshPage(navigate, 1);
   };
-
+  /** 编辑链接 */
   const handleEditLink = async (values: FieldType) => {
     const { bgColor, direction } = values;
     // 转化成 hex
@@ -65,6 +65,7 @@ const LinkItem = (props: IProps) => {
     });
     waitAndRefreshPage(navigate, 1);
   };
+  /** 编辑链接 modalForm */
   const renderFormModalChildren = () => {
     return (
       <Form
@@ -84,7 +85,7 @@ const LinkItem = (props: IProps) => {
           name="name"
           rules={[{ required: true, message: "请输入链接名称" }]}
         >
-          <Input placeholder="请输入链接名" />
+          <Input placeholder="请输入链接名" showCount maxLength={8} />
         </Form.Item>
         <Form.Item label="图标颜色" name="bgColor">
           <ColorPicker showText defaultFormat="hex" />
@@ -146,6 +147,6 @@ const LinkItem = (props: IProps) => {
       ) : null}
     </div>
   );
-};
+});
 
 export default LinkItem;

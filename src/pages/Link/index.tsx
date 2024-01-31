@@ -18,7 +18,7 @@ const Link = observer(() => {
   const navigate = useNavigate();
   useEffect(() => {
     linkStore.findAllCateOpr();
-  }, []);
+  }, [linkStore]);
 
   const [formModalHandler] = useFormModal<FieldType>();
 
@@ -30,12 +30,16 @@ const Link = observer(() => {
   const renderFormModalChildren = () => {
     return (
       <Form
-        labelCol={{ span: 2 }}
+        labelCol={{ span: 4 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
       >
-        <Form.Item label="名称" name="cateName">
-          <Input placeholder="请输入分类名" />
+        <Form.Item
+          label="名称"
+          name="cateName"
+          rules={[{ required: true, message: "请输入分类名称" }]}
+        >
+          <Input placeholder="请输入分类名" showCount maxLength={8} />
         </Form.Item>
       </Form>
     );

@@ -6,9 +6,9 @@ import App from "./App.tsx";
 import "@/assets/less/init.less";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  // </React.StrictMode>,
 );

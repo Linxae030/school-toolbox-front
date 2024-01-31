@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import "./index.less";
 import {
   Card,
@@ -48,7 +48,7 @@ const gridStyle: React.CSSProperties = {
   justifyContent: "center",
 };
 
-const LinkCard = (props: IProps) => {
+const LinkCard = memo((props: IProps) => {
   const { title, categoryId, links } = props;
 
   const { linkStore, userStore } = useStore();
@@ -62,6 +62,7 @@ const LinkCard = (props: IProps) => {
   const [linkFormModalHandler] = useFormModal<LinkItemFieldType>();
   const [cateFormModalHandler] = useFormModal<CateFieldType>();
 
+  /** 创建链接 */
   const handleCreateLink = async (values: LinkItemFieldType) => {
     const { bgColor, direction } = values;
     // 转化成 hex
@@ -78,17 +79,17 @@ const LinkCard = (props: IProps) => {
 
     await waitAndRefreshPage(navigate, 1);
   };
-
+  /** 删除分类 */
   const handleDeleteCate = async () => {
     await deleteCateOpr(categoryId);
     waitAndRefreshPage(navigate, 1);
   };
-
+  /** 编辑分类 */
   const handleEditCate = async (name: string) => {
     await updateCateOpr({ name, _id: categoryId });
     waitAndRefreshPage(navigate, 1);
   };
-
+  /** 创建链接 modalForm */
   const renderLinkFormModalChildren = () => {
     return (
       <Form
@@ -108,7 +109,7 @@ const LinkCard = (props: IProps) => {
           name="name"
           rules={[{ required: true, message: "请输入链接名称" }]}
         >
-          <Input placeholder="请输入链接名" />
+          <Input placeholder="请输入链接名" showCount maxLength={8} />
         </Form.Item>
         <Form.Item label="图标颜色" name="bgColor">
           <ColorPicker showText defaultFormat="hex" />
@@ -122,19 +123,25 @@ const LinkCard = (props: IProps) => {
       </Form>
     );
   };
+  /** 编辑分类 modalForm */
   const renderCateFormModalChildren = () => {
     return (
       <Form
-        labelCol={{ span: 2 }}
+        labelCol={{ span: 4 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
       >
-        <Form.Item label="名称" name="cateName">
-          <Input placeholder="请输入分类名" />
+        <Form.Item
+          label="名称"
+          name="cateName"
+          rules={[{ required: true, message: "请输入分类名称" }]}
+        >
+          <Input placeholder="请输入分类名" showCount maxLength={8} />
         </Form.Item>
       </Form>
     );
   };
+  /** card 额外操作 */
   const renderCardExtraContent = () => {
     return (
       <span>
@@ -195,6 +202,7 @@ const LinkCard = (props: IProps) => {
       </span>
     );
   };
+  /** card 标题 */
   const renderCardTitle = () => {
     return (
       <span className="card-title">
@@ -235,6 +243,6 @@ const LinkCard = (props: IProps) => {
       </Card>
     </div>
   );
-};
+});
 
 export default LinkCard;
