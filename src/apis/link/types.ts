@@ -22,13 +22,15 @@ export interface LinkCate {
   /** 分类名 */
   name: string;
   /** 分类中包含的链接 */
-  links: Link[];
+  links: WithMongoId<Link>[];
 }
+
 export type UpdateLinkRes = WithMongoId<Link>;
 export type UpdateCateRes = WithMongoId<LinkCate>;
 export type FindAllCateRes = WithMongoId<LinkCate>[];
 
 export type CreateLinkPayload = Link;
 export type CreateCatePayload = Pick<LinkCate, "name">;
-export type UpdateLinkPayload = Partial<OmitAccount<Link>>;
+export type UpdateLinkPayload = WithMongoId<Partial<OmitAccount<Link>>>;
 export type UpdateCatePayload = Partial<OmitAccount<LinkCate>>;
+export type DeleteCatePayload = Partial<OmitAccount<LinkCate>>;

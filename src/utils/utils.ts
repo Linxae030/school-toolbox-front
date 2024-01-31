@@ -1,3 +1,4 @@
+import { NavigateFunction } from "react-router-dom";
 import {
   CommonFailResponse,
   CommonResponse,
@@ -31,7 +32,7 @@ export const handleResponse = <T>(
  * @param arr 待检查数组
  * @returns
  */
-export const ensureArray = <T>(arr: T[]) =>
+export const ensureArray = <T>(arr: T[] | undefined) =>
   arr ? (Array.isArray(arr) ? arr : [arr]) : [];
 
 /**
@@ -43,4 +44,17 @@ export const wait = (time: number) => {
   return new Promise((resolve) => {
     setTimeout(resolve, time * 1000);
   });
+};
+
+export const waitAndRefreshPage = async (
+  navigate: NavigateFunction,
+  time: number,
+) => {
+  await wait(time);
+  navigate(0);
+};
+
+/** 格式化链接 */
+export const formatDirection = (direction: string) => {
+  return `https://${direction}`;
 };

@@ -53,10 +53,13 @@ export const FormModal = memo(
       onOk?.(values);
     };
 
-    const handleOk = () => {
-      // submit 触发onFinish
-      formIns.submit();
-      setModalOpen(false);
+    const handleOk = async () => {
+      // 校验后触发onFinish
+      try {
+        await formIns.validateFields();
+        setModalOpen(false);
+        formIns.submit();
+      } catch (e) {}
     };
 
     const handleCancel = () => {

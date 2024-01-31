@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./index.less";
-import { Anchor, Button, Form, Input, Modal } from "antd";
+import { Anchor, Button, Form, Input } from "antd";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
 import LinkCard from "./LinkCard";
 import useStore from "@/store";
-import { ensureArray, handleResponse, wait } from "@/utils";
+import { ensureArray, waitAndRefreshPage } from "@/utils";
 import { useFormModal } from "@/components/Modal";
-import { useLocation, useNavigate } from "react-router-dom";
 
 type FieldType = {
   cateName?: string;
@@ -15,38 +15,46 @@ type FieldType = {
 const Link = observer(() => {
   const { linkStore } = useStore();
   const { cates, createCateOpr } = linkStore;
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
   useEffect(() => {
     linkStore.findAllCateOpr();
   }, []);
 
-  const [handler] = useFormModal<FieldType>();
+  const [formModalHandler] = useFormModal<FieldType>();
+
+  const handleCreateCate = async (name: string) => {
+    await createCateOpr({ name });
+    waitAndRefreshPage(navigate, 1);
+  };
+
+  const renderFormModalChildren = () => {
+    return (
+      <Form
+        labelCol={{ span: 2 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+      >
+        <Form.Item label="名称" name="cateName">
+          <Input placeholder="请输入分类名" />
+        </Form.Item>
+      </Form>
+    );
+  };
 
   return (
-    <div id="link-c" className="link-container" style={{ padding: "20px" }}>
+    <div className="link-container" style={{ padding: "20px" }}>
       <div className="operation-buttons">
         <Button
           type="primary"
           onClick={() =>
-            handler.open({
+            formModalHandler.open({
               modalProps: {
                 title: "添加分类",
-                onOk: async (values) => {
-                  const { cateName } = values;
-                  await createCateOpr({ name: cateName ?? "" });
-                  await wait(1);
-                  // TODO: 别这么刷新
-                  window.location.reload();
-                },
+                cancelText: "取消",
+                okText: "添加",
+                onOk: ({ cateName }) => handleCreateCate(cateName ?? ""),
               },
-              formChildren: (
-                <Form>
-                  <Form.Item name="cateName">
-                    <Input placeholder="请输入分类名" />
-                  </Form.Item>
-                </Form>
-              ),
+              formChildren: renderFormModalChildren(),
               initialValue: {},
             })
           }
@@ -66,9 +74,15 @@ const Link = observer(() => {
             };
           })}
         />
-        <div className="part-item-container">
+        <div className="card-item-container">
           {ensureArray(cates).map((cate) => (
-            <LinkCard key={cate._id} title={cate.name} bordered={false} />
+            <LinkCard
+              key={cate._id}
+              title={cate.name}
+              categoryId={cate._id}
+              links={cate.links}
+              bordered={false}
+            />
           ))}
         </div>
       </div>

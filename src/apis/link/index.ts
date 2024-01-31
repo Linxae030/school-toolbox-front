@@ -16,8 +16,10 @@ export const createLink = (payload: CreateLinkPayload) => {
 };
 
 export const updateLink = (payload: UpdateLinkPayload) => {
+  const { _id, ...rest } = payload;
   return LinRequest.post<UpdateLinkRes>("link/updateLink", {
-    data: payload,
+    data: rest,
+    params: { _id },
   });
 };
 
@@ -38,8 +40,10 @@ export const createCate = (payload: CreateCatePayload) => {
 };
 
 export const updateCate = (payload: UpdateLinkPayload) => {
-  return LinRequest.post<UpdateCateRes>("link/updateLink", {
-    data: payload,
+  const { _id, ...rest } = payload;
+  return LinRequest.post<UpdateCateRes>("link/updateCate", {
+    data: rest,
+    params: { _id },
   });
 };
 

@@ -16,9 +16,9 @@ const Login = () => {
     const { code } = res;
     if (code === 1) {
       const { data, msg } = res;
-      const { token, nickname } = data;
+      const { token } = data;
       setLocalStorageItem(TOKEN_NAME_IN_LOCAL, token);
-      userStore.setNickname(nickname);
+      await userStore.initUserProfile();
       navigate("/timetable");
       message.success(msg);
     } else {

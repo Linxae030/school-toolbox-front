@@ -1,0 +1,88 @@
+
+.link-item-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  aspect-ratio: 1/1;
+
+  .link-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 80%;
+    background-color:red;
+    border-radius: 15%;
+    box-shadow: none;
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+  
+    &:hover {
+      box-shadow: 0 0 5px rgb(0 0 0 / 50%);
+    }
+  
+    .name {
+      color: white;
+      font-weight: 700;
+    }
+  
+   
+  }
+
+  .edit-button {
+    right: 20px;
+
+  }
+
+  .delete-button{
+    right: 0;
+  }
+
+  .operation-button {
+    position: absolute;
+    top: 0;
+    width: 20px;
+    background-color: rgb(255 255 255 / 30%);
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    animation-play-state: paused !important;
+    transition: 0.3s all;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #fff;
+    }
+  }
+
+  .is-editing {
+    animation: edit-shaking 0.3s infinite;
+    cursor: default;
+
+  }
+}
+
+
+
+@keyframes edit-shaking {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(2deg);
+  }
+  
+  50% {
+    transform: rotate(0deg);
+  }
+
+  75% {
+    transform: rotate(-2deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}

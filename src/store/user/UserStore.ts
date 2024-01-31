@@ -5,23 +5,22 @@ import { getUserProfile } from "@/apis";
 export default class UserStore {
   nickname!: string;
 
+  account!: string;
+
   token!: string;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  setNickname = (nickname: string) => {
-    this.nickname = nickname;
-  };
-
   initUserProfile = async () => {
     const res = await getUserProfile();
     if (res.code === 1) {
       const { data } = res;
-      const { nickname } = data;
+      const { nickname, account } = data;
       runInAction(() => {
         this.nickname = nickname;
+        this.account = account;
       });
     } else {
       message.error(res.ret);

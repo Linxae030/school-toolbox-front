@@ -32,7 +32,8 @@ module.exports = {
     "no-param-reassign": "off",
     "import/prefer-default-export":"off",
     "no-underscore-dangle": "off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "no-empty": "off"
   },
 };
 
