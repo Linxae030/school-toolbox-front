@@ -30,13 +30,16 @@ const AppLayout: React.FC = observer(() => {
   return (
     <Layout className="layout-container">
       <Sider trigger={null} collapsible collapsed={collapsed} className="sider">
-        <div className="sider-top-area">
-          <div className="avatar"></div>
-          <div className="user-info">
-            <div>您好!</div>
-            <div className="nickname">{nickname}</div>
+        {!collapsed ? (
+          <div className="sider-top-area">
+            <div className="avatar"></div>
+            <div className="user-info">
+              <div>您好!</div>
+              <div className="nickname">{nickname}</div>
+            </div>
           </div>
-        </div>
+        ) : null}
+
         <Menu
           theme="dark"
           mode="inline"
