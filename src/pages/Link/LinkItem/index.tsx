@@ -11,11 +11,11 @@ import {
   formatDirection,
   waitAndRefreshPage,
 } from "@/utils";
-import { OmitAccount, WithMongoId } from "@/types";
+import { WithMongoId } from "@/types";
 import useStore from "@/store";
 import { useFormModal } from "@/components/Modal";
 
-type FieldType = Omit<OmitAccount<Link>, "categoryId" | "bgColor"> & {
+type FieldType = Omit<Link, "categoryId" | "bgColor"> & {
   bgColor: Color | string;
 };
 

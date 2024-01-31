@@ -16,11 +16,10 @@ import { useFormModal } from "@/components/Modal";
 import {
   LinkIconDisplayModeEnum,
   ensureArray,
-  formatDirection,
   waitAndRefreshPage,
 } from "@/utils";
 import { Link } from "@/apis/link/types";
-import { OmitAccount, WithMongoId } from "@/types";
+import { WithMongoId } from "@/types";
 import useStore from "@/store";
 import LinkItem from "../LinkItem";
 
@@ -29,7 +28,7 @@ type IProps = CardProps & {
   categoryId: string;
 };
 
-type LinkItemFieldType = Omit<OmitAccount<Link>, "categoryId" | "bgColor"> & {
+type LinkItemFieldType = Omit<Link, "categoryId" | "bgColor"> & {
   bgColor: Color | string;
 };
 
@@ -51,11 +50,10 @@ const gridStyle: React.CSSProperties = {
 const LinkCard = memo((props: IProps) => {
   const { title, categoryId, links } = props;
 
-  const { linkStore, userStore } = useStore();
+  const { linkStore } = useStore();
   const navigate = useNavigate();
 
   const { deleteCateOpr, updateCateOpr, createLinkOpr } = linkStore;
-  const { account } = userStore;
 
   const [isEditLink, setIsEditLink] = useState(false);
 
@@ -74,7 +72,6 @@ const LinkCard = memo((props: IProps) => {
       bgColor: hexColor,
       direction,
       categoryId,
-      account,
     });
 
     await waitAndRefreshPage(navigate, 1);

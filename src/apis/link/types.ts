@@ -1,9 +1,9 @@
 import { LinkIconDisplayModeEnum } from "@/utils";
-import { OmitAccount, WithMongoId } from "@/types";
+import { WithMongoId } from "@/types";
 
 export interface Link {
   /** 所属用户 */
-  account: string;
+  user: string;
   /** 链接名 */
   name: string;
   /** 链接指向 */
@@ -18,7 +18,7 @@ export interface Link {
 
 export interface LinkCate {
   /** 所属用户 */
-  account: string;
+  user: string;
   /** 分类名 */
   name: string;
   /** 分类中包含的链接 */
@@ -31,6 +31,6 @@ export type FindAllCateRes = WithMongoId<LinkCate>[];
 
 export type CreateLinkPayload = Link;
 export type CreateCatePayload = Pick<LinkCate, "name">;
-export type UpdateLinkPayload = WithMongoId<Partial<OmitAccount<Link>>>;
-export type UpdateCatePayload = Partial<OmitAccount<LinkCate>>;
-export type DeleteCatePayload = Partial<OmitAccount<LinkCate>>;
+export type UpdateLinkPayload = WithMongoId<Partial<Link>>;
+export type UpdateCatePayload = Partial<LinkCate>;
+export type DeleteCatePayload = Partial<LinkCate>;
