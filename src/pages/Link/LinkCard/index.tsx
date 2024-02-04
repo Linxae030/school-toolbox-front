@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Color } from "antd/es/color-picker";
 import { EditOutlined } from "@ant-design/icons";
+import * as _ from "lodash";
 import { useFormModal } from "@/components/Modal";
 import {
   LinkIconDisplayModeEnum,
@@ -70,7 +71,7 @@ const LinkCard = memo((props: IProps) => {
     await createLinkOpr({
       ...values,
       bgColor: hexColor,
-      direction,
+      direction: _.trim(direction),
       categoryId,
     });
 

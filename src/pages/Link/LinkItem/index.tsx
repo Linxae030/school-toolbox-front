@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import "./index.less";
 import * as cx from "classnames";
+import * as _ from "lodash";
 import { CloseCircleFilled, EditFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Popconfirm, Radio } from "antd";
@@ -60,7 +61,7 @@ const LinkItem = memo((props: IProps) => {
     await updateLinkOpr({
       ...values,
       bgColor: hexColor,
-      direction,
+      direction: _.trim(direction),
       _id,
     });
     waitAndRefreshPage(navigate, 1);
