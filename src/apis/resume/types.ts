@@ -43,9 +43,9 @@ export interface GroupContent {
   /** 内容标题 */
   contentTitle: string;
   /** 内容标签 */
-  tags: TagContent[];
+  tags?: TagContent[];
   /** 内容时间范围 */
-  timeRange: TimeRange;
+  timeRange?: TimeRange;
   /** 内容详情 */
   detail: GroupDetail;
 }
@@ -61,17 +61,17 @@ export interface GroupConfig {
 /** 个人信息 */
 export interface PersonalInfo {
   /** 姓名 */
-  name: WithIcon<string>;
+  name?: WithIcon<string>;
   /** 性别 */
-  gender: WithIcon<Gender>;
+  gender?: WithIcon<Gender>;
   /** 微信号 */
-  weChat: WithIcon<string>;
+  weChat?: WithIcon<string>;
   /** 手机号 */
-  telephone: WithIcon<string>;
+  telephone?: WithIcon<string>;
   /** 邮箱 */
-  email: WithIcon<string>;
+  email?: WithIcon<string>;
   /** 链接 */
-  links: WithIcon<string>[];
+  links?: WithIcon<string>[];
 }
 
 /** 简历配置 */
