@@ -1,7 +1,7 @@
 import { LinkIconDisplayModeEnum } from "@/utils";
-import { WithMongoId } from "@/types";
+import { MongooseDoc, WithMongoId } from "@/types";
 
-export interface Link {
+export interface Link extends MongooseDoc {
   /** 所属用户 */
   user: string;
   /** 链接名 */
@@ -16,7 +16,7 @@ export interface Link {
   displayMode: LinkIconDisplayModeEnum;
 }
 
-export interface LinkCate {
+export interface LinkCate extends MongooseDoc {
   /** 所属用户 */
   user: string;
   /** 分类名 */
@@ -25,12 +25,12 @@ export interface LinkCate {
   links: WithMongoId<Link>[];
 }
 
-export type UpdateLinkRes = WithMongoId<Link>;
-export type UpdateCateRes = WithMongoId<LinkCate>;
-export type FindAllCateRes = WithMongoId<LinkCate>[];
+export type UpdateLinkRes = Link;
+export type UpdateCateRes = LinkCate;
+export type FindAllCateRes = LinkCate[];
 
 export type CreateLinkPayload = Link;
+export type UpdateLinkPayload = Partial<Link>;
 export type CreateCatePayload = Pick<LinkCate, "name">;
-export type UpdateLinkPayload = WithMongoId<Partial<Link>>;
 export type UpdateCatePayload = Partial<LinkCate>;
 export type DeleteCatePayload = Partial<LinkCate>;
