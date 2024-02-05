@@ -76,8 +76,6 @@ export interface PersonalInfo {
 
 /** 简历配置 */
 export interface ResumeConfig {
-  /** 模板选择 */
-  template: string;
   /** 简历标题 */
   title: string;
   /** 分组配置 */
