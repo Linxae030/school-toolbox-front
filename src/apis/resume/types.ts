@@ -14,8 +14,9 @@ export interface DividedPart<T> {
 }
 
 export interface WithIcon<T> {
-  icon: string;
+  icon?: string;
   content: T;
+  clickAble?: boolean;
 }
 
 export type TextContent = string;
@@ -23,12 +24,15 @@ export type ListContent = string[];
 export type TagContent = string;
 
 /** 分组内容详情 */
-export interface GroupDetail {
-  /** 详情标题 */
-  detailTitle: string;
-  /** 详情内容 */
-  detailContent: TextContent | ListContent;
-}
+// export interface GroupDetail {
+//   /** 详情标题 */
+//   detailTitle: string;
+//   /** 详情内容 */
+//   detailContent: TextContent | ListContent;
+// }
+
+export type GroupDetail = TextContent | ListContent;
+export type GroupDesc = TextContent | ListContent;
 
 /** 内容项时间范围 */
 export interface TimeRange {
@@ -41,13 +45,15 @@ export interface TimeRange {
 /** 分组内容配置 */
 export interface GroupContent {
   /** 内容标题 */
-  contentTitle: string;
+  contentTitle?: string;
   /** 内容标签 */
   tags?: TagContent[];
   /** 内容时间范围 */
   timeRange?: TimeRange;
   /** 内容详情 */
   detail: GroupDetail;
+  /** 内容描述 */
+  description?: GroupDesc;
 }
 
 /** 分组配置 */
@@ -55,23 +61,7 @@ export interface GroupConfig {
   /** 分组标题 */
   subtitle: string;
   /** 分组内容 */
-  content: GroupContent[];
-}
-
-/** 个人信息 */
-export interface PersonalInfo {
-  /** 姓名 */
-  name?: WithIcon<string>;
-  /** 性别 */
-  gender?: WithIcon<Gender>;
-  /** 微信号 */
-  weChat?: WithIcon<string>;
-  /** 手机号 */
-  telephone?: WithIcon<string>;
-  /** 邮箱 */
-  email?: WithIcon<string>;
-  /** 链接 */
-  links?: WithIcon<string>[];
+  contents: GroupContent[];
 }
 
 /** 简历配置 */
@@ -81,7 +71,7 @@ export interface ResumeConfig {
   /** 分组配置 */
   groupConfig: GroupConfig[];
   /** 个人信息 */
-  personalInfo: DividedPart<PersonalInfo>;
+  personalInfo: DividedPart<WithIcon<string>[]>;
 }
 
 /** 简历 */

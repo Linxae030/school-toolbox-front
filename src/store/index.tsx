@@ -2,6 +2,7 @@ import React from "react";
 import UserStore from "./user/UserStore";
 import LoginStore from "./login/LoginStore";
 import LinkStore from "./link/LinkStore";
+import ResumeStore from "./resume/ResumeStore";
 
 class RootStore {
   userStore: UserStore;
@@ -10,11 +11,14 @@ class RootStore {
 
   linkStore: LinkStore;
 
+  resumeStore: ResumeStore;
+
   constructor() {
     // 对引入进行来的子模块进行实例化操作，并挂载到RootStore上
     this.userStore = new UserStore();
     this.loginStore = new LoginStore();
     this.linkStore = new LinkStore();
+    this.resumeStore = new ResumeStore();
   }
 }
 

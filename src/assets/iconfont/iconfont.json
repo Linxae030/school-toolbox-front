@@ -1,0 +1,93 @@
+{
+  "id": "4433166",
+  "name": "school-toolbox",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "695127",
+      "name": "标题",
+      "font_class": "biaoti",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "4331530",
+      "name": "详细",
+      "font_class": "xiangxi",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "6447207",
+      "name": "详细",
+      "font_class": "xiangxi1",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "7588127",
+      "name": "右",
+      "font_class": "you",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "7588133",
+      "name": "左",
+      "font_class": "zuo",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "77156",
+      "name": "微信",
+      "font_class": "weixin",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "348534",
+      "name": "github",
+      "font_class": "github",
+      "unicode": "eaf6",
+      "unicode_decimal": 60150
+    },
+    {
+      "icon_id": "705665",
+      "name": "房子",
+      "font_class": "fangzi",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "5387390",
+      "name": "手机",
+      "font_class": "shouji",
+      "unicode": "eac3",
+      "unicode_decimal": 60099
+    },
+    {
+      "icon_id": "5387468",
+      "name": "链接",
+      "font_class": "lianjie",
+      "unicode": "eadc",
+      "unicode_decimal": 60124
+    },
+    {
+      "icon_id": "5387731",
+      "name": "邮件",
+      "font_class": "youjian",
+      "unicode": "eb44",
+      "unicode_decimal": 60228
+    },
+    {
+      "icon_id": "13510688",
+      "name": "面-人物",
+      "font_class": "mian-renwu",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    }
+  ]
+}

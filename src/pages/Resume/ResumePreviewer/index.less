@@ -1,0 +1,61 @@
+.resume-previewer{
+  display: flex;
+  padding: 10px 20px;
+  width: 50%;
+  min-width: 620px;
+  max-width: 700px;
+  font-size: 14px;
+  color: black;
+  background-color: #fff;
+  flex-direction: column;
+  aspect-ratio: 7/10;
+
+  .block-content {
+    margin: 10px 0;
+  }
+//   @media (width <= 30%) {
+//     & {
+//         font-size: 14px;
+//     }
+// }
+
+  // 总标题
+  .title {
+    height: 1em;
+    font-size: 2.2em;
+    line-height: 1em;
+    font-weight: 700;
+  }
+  // 个人信息
+  .personal-info{
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 1em;
+
+    .part-item {
+      display: flex;
+      line-height: 17px;
+      height: 17px;
+    }
+
+    // 取消链接效果
+    a {
+      text-decoration: none;
+
+      &:hover {
+        color: black;
+      }
+    }
+
+    .right-part {
+      .part-item {
+        justify-content: flex-end;
+      }
+    }
+
+    .icon {
+      margin-right: 3px;
+    }
+  }
+}
