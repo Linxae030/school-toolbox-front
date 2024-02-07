@@ -22,7 +22,7 @@ type ModalPropsCoverOnOk<T> = Omit<ModalProps, "onOk"> & {
 interface FormModalConfig<T> {
   modalProps: ModalPropsCoverOnOk<T>;
   formChildren: ReactElement;
-  initialValue: Partial<T>;
+  initialValue?: Partial<T>;
 }
 // 对外暴露的 api
 interface FormModalExposeHandler {
@@ -32,6 +32,11 @@ interface FormModalExposeHandler {
   setInitialValues: (initialValues: any) => void;
   setFormChildren: (formChildren: ReactElement) => void;
 }
+
+export type FormModalHandler = {
+  open<T>(config: FormModalConfig<T>): void;
+  close: () => void;
+};
 
 export const FormModal = memo(
   forwardRef((props: ModalProps, ref) => {
@@ -51,6 +56,7 @@ export const FormModal = memo(
 
     const onFinish = (values: any) => {
       onOk?.(values);
+      formIns.resetFields();
     };
 
     const handleOk = async () => {
@@ -102,11 +108,11 @@ export const FormModal = memo(
   }),
 );
 
-export function useFormModal<T = any>() {
+export function useFormModal() {
   const modalRef = useRef<FormModalExposeHandler>();
   const handler = useMemo(() => {
     return {
-      open: (config: FormModalConfig<T>) => {
+      open<T>(config: FormModalConfig<T>) {
         const { initialValue, modalProps, formChildren } = config;
         // 设置初始值
         modalRef?.current?.setInitialValues(initialValue);

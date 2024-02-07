@@ -13,3 +13,19 @@ export enum LinkIconDisplayModeEnum {
   /** 全展示 */
   Full = 2,
 }
+
+export const ICON_CLASSNAMES_MAP = {
+  tianjia: "tianjia",
+  biaoti: "biaoti",
+  xiangxi: "xiangxi",
+  xiangxi1: "xiangxi1",
+  you: "you",
+  zuo: "zuo",
+  weixin: "weixin",
+  github: "github",
+  fangzi: "fangzi",
+  shouji: "shouji",
+  lianjie: "lianjie",
+  youjian: "youjian",
+  renwu: "mian-renwu",
+};

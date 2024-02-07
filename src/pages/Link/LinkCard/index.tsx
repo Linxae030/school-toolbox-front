@@ -58,8 +58,7 @@ const LinkCard = memo((props: IProps) => {
 
   const [isEditLink, setIsEditLink] = useState(false);
 
-  const linkFormModalHandler = useFormModal<LinkItemFieldType>();
-  const cateFormModalHandler = useFormModal<CateFieldType>();
+  const formModalHandler = useFormModal();
 
   /** 创建链接 */
   const handleCreateLink = async (values: LinkItemFieldType) => {
@@ -145,7 +144,7 @@ const LinkCard = memo((props: IProps) => {
       <span>
         <a
           onClick={() =>
-            linkFormModalHandler.open({
+            formModalHandler.open<LinkItemFieldType>({
               modalProps: {
                 title: "添加链接",
                 cancelText: "取消",
@@ -208,7 +207,7 @@ const LinkCard = memo((props: IProps) => {
         <span
           className="edit-button"
           onClick={() =>
-            cateFormModalHandler.open({
+            formModalHandler.open<CateFieldType>({
               modalProps: {
                 title: "编辑分类",
                 cancelText: "取消",

@@ -31,16 +31,11 @@ export type TagContent = string;
 //   detailContent: TextContent | ListContent;
 // }
 
-export type GroupDetail = TextContent | ListContent;
-export type GroupDesc = TextContent | ListContent;
+export type GroupDetail = ListContent;
+export type GroupDesc = ListContent;
 
 /** 内容项时间范围 */
-export interface TimeRange {
-  /** 起始时间 */
-  start: string;
-  /** 结束时间 */
-  end: string | "至今";
-}
+export type TimeRange = string[];
 
 /** 分组内容配置 */
 export interface GroupContent {
@@ -51,7 +46,7 @@ export interface GroupContent {
   /** 内容时间范围 */
   timeRange?: TimeRange;
   /** 内容详情 */
-  detail: GroupDetail;
+  detail?: GroupDetail;
   /** 内容描述 */
   description?: GroupDesc;
 }

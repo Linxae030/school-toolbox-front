@@ -6,14 +6,15 @@ type IProps = {
 const ConfigFormTree = (props: IProps) => {
   const { treeData } = props;
   return (
-    <div>
+    <div style={{ width: "80%" }}>
       <Tree
         showIcon
         defaultExpandAll
         treeData={treeData}
+        blockNode
         onSelect={(selectedKeys, e) => {
-          console.log("selectedKeys", selectedKeys);
-          console.log("e", e);
+          // @ts-expect-error 对的的
+          e.node.callBack?.();
         }}
       />
     </div>

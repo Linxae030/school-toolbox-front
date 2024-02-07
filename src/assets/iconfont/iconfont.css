@@ -1,8 +1,8 @@
 @font-face {
   font-family: iconfont; /* Project id 4433166 */
-  src: url('iconfont.woff2?t=1707217585306') format('woff2'),
-       url('iconfont.woff?t=1707217585306') format('woff'),
-       url('iconfont.ttf?t=1707217585306') format('truetype');
+  src: url('iconfont.woff2?t=1707230559943') format('woff2'),
+       url('iconfont.woff?t=1707230559943') format('woff'),
+       url('iconfont.ttf?t=1707230559943') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,11 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  vertical-align:middle;
+}
+
+.icon-tianjia::before {
+  content: "\e8b3";
 }
 
 .icon-biaoti::before {

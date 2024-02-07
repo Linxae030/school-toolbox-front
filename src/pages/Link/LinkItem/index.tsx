@@ -28,7 +28,7 @@ const LinkItem = memo((props: IProps) => {
   const { bgColor, name, direction, displayMode, isEditLink, _id } = props;
 
   const { linkStore } = useStore();
-  const formModalHandler = useFormModal<FieldType>();
+  const formModalHandler = useFormModal();
   const navigate = useNavigate();
 
   const { deleteLinkOpr, updateLinkOpr } = linkStore;
@@ -121,7 +121,7 @@ const LinkItem = memo((props: IProps) => {
           <span
             className="operation-button edit-button"
             onClick={() =>
-              formModalHandler.open({
+              formModalHandler.open<FieldType>({
                 modalProps: {
                   title: "编辑链接",
                   onOk: (values) => handleEditLink(values),

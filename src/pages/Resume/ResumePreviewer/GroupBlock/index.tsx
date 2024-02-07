@@ -9,8 +9,8 @@ const GroupBlock = memo((props: IProps) => {
   const { subtitle, contents } = props;
 
   const formatTimeRange = (timeRange: TimeRange) => {
-    const { start, end } = timeRange;
-    return `${start} - ${end}`;
+    const [start, end] = timeRange;
+    return start && end ? `${start} - ${end}` : "";
   };
 
   const renderTimeRange = (timeRange?: TimeRange) => {
@@ -45,7 +45,7 @@ const GroupBlock = memo((props: IProps) => {
     );
   };
 
-  const renderDetail = (detail: GroupDetail) => {
+  const renderDetail = (detail?: GroupDetail) => {
     return conditionalRender(
       _.isArray(detail),
       () => (
