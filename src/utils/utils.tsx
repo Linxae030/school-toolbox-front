@@ -78,3 +78,8 @@ export function conditionalRender(
 ) {
   return condition ? onTrue?.() ?? null : onFalse?.() ?? null;
 }
+
+/** 生成iconfont className */
+export const iconfontCx = (postfix?: string) => {
+  return postfix ? `iconfont icon-${postfix}` : "";
+};

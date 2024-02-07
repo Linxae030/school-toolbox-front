@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction, toJS } from "mobx";
+import { autorun, makeAutoObservable, reaction, toJS } from "mobx";
 import {
   Button,
   Collapse,
@@ -14,7 +14,7 @@ import * as _ from "lodash";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import { GroupConfig, Resume, WithIcon } from "@/apis/resume";
-import { ICON_CLASSNAMES_MAP, ensureArray } from "@/utils";
+import { ICON_CLASSNAMES_MAP, ensureArray, iconfontCx } from "@/utils";
 import { FormModalHandler, useFormModal } from "@/components/Modal";
 import DynamicTagSelector from "@/pages/Resume/DynamicTagSelector";
 
@@ -197,16 +197,13 @@ export default class ResumeStore {
   constructor() {
     makeAutoObservable(this);
     // currentId 改变重新渲染
-    reaction(
-      () => {
-        const findResume = this.resumeList.find(
-          (resume) => resume._id === this.currentId,
-        );
-        if (findResume) this.setCurrentResumeData(findResume);
-        else this.setCurrentResumeData(defaultResumeData as any);
-      },
-      () => this.currentId,
-    );
+    autorun(() => {
+      const findResume = this.resumeList.find(
+        (resume) => resume._id === this.currentId,
+      );
+      if (findResume) this.setCurrentResumeData(findResume);
+      else this.setCurrentResumeData(defaultResumeData as any);
+    });
   }
 
   get treeData() {
@@ -350,7 +347,7 @@ export default class ResumeStore {
       const leftPartTreeData = generateTreeNode(
         "左侧列表",
         "2-1",
-        <span className="iconfont icon-zuo"></span>,
+        <span className={iconfontCx("zuo")}></span>,
         [
           ...leftPart.map((item, index) =>
             generateTreeNode(
@@ -366,14 +363,14 @@ export default class ResumeStore {
                   ),
               ),
               `2-1-${index + 1}`,
-              <span className={`iconfont icon-${item.icon}`}></span>,
+              <span className={iconfontCx(item.icon)}></span>,
               [],
             ),
           ),
           {
             title: "新增一项",
             key: "114-514",
-            icon: <span className={`iconfont icon-tianjia`}></span>,
+            icon: <span className={iconfontCx("tianjia")}></span>,
             callBack: () =>
               formModalHandler.open<PersonalInfoFieldType>({
                 modalProps: {
@@ -390,7 +387,7 @@ export default class ResumeStore {
       const rightPartTreeData = generateTreeNode(
         "右侧列表",
         "2-2",
-        <span className="iconfont icon-you"></span>,
+        <span className={iconfontCx("you")}></span>,
         [
           ...rightPart.map((item, index) =>
             generateTreeNode(
@@ -406,14 +403,14 @@ export default class ResumeStore {
                   ),
               ),
               `2-2-${index + 1}`,
-              <span className={`iconfont icon-${item.icon}`}></span>,
+              <span className={iconfontCx(item.icon)}></span>,
               [],
             ),
           ),
           {
             title: "新增一项",
             key: "114-515",
-            icon: <span className={`iconfont icon-tianjia`}></span>,
+            icon: <span className={iconfontCx("tianjia")}></span>,
             callBack: () =>
               formModalHandler.open({
                 modalProps: {
@@ -429,7 +426,7 @@ export default class ResumeStore {
       return generateTreeNode(
         "个人信息",
         "2",
-        <span className="iconfont icon-mian-renwu"></span>,
+        <span className={iconfontCx("mian-renwu")}></span>,
         [leftPartTreeData, rightPartTreeData],
       );
     };
@@ -438,7 +435,7 @@ export default class ResumeStore {
       return generateTreeNode(
         "详细信息",
         "3",
-        <span className="iconfont icon-xiangxi1"></span>,
+        <span className={iconfontCx("xiangxi1")}></span>,
         [
           ...groupConfig.map((item, index1) => {
             const contentTreeData = ensureArray(item.contents).map(
@@ -446,7 +443,7 @@ export default class ResumeStore {
                 generateTreeNode(
                   content.contentTitle,
                   `3-${index1}-${index2}`,
-                  <span className="iconfont icon-biaoti"></span>,
+                  <span className={iconfontCx("biaoti")}></span>,
                 ),
             );
 
@@ -458,14 +455,14 @@ export default class ResumeStore {
                   this.handleEditGroupConfig(formModalHandler, item, index1),
               ),
               `3-${index1}`,
-              <span className="iconfont icon-xiangxi"></span>,
+              <span className={iconfontCx("xiangxi")}></span>,
               contentTreeData,
             );
           }),
           {
             title: "新增一项",
             key: "114-516",
-            icon: <span className={`iconfont icon-tianjia`}></span>,
+            icon: <span className={iconfontCx("tianjia")}></span>,
             callBack: () =>
               formModalHandler.open<GroupFieldType>({
                 modalProps: {
@@ -488,7 +485,7 @@ export default class ResumeStore {
       generateTreeNode(
         "标题",
         "1",
-        <span className="iconfont icon-biaoti"></span>,
+        <span className={iconfontCx("biaoti")}></span>,
         [
           generateTreeNode(
             this.renderTitleWithOpr(title, undefined, () =>
@@ -509,7 +506,7 @@ export default class ResumeStore {
     // 遍历图标
     const options = Object.values(ICON_CLASSNAMES_MAP).map((name) => ({
       value: name,
-      label: <span className={`iconfont icon-${name}`}></span>,
+      label: <span className={iconfontCx(name)}></span>,
     }));
 
     return (
