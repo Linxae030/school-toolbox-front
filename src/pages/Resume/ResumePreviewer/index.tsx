@@ -1,17 +1,25 @@
-import React from "react";
+import { HTMLProps } from "react";
 import "./index.less";
 
+import * as cx from "classnames";
 import { Resume } from "@/apis/resume";
 import { ensureArray, iconfontCx, mapRender } from "@/utils";
 import GroupBlock from "./GroupBlock";
 
-type IProps = Pick<Resume, "resumeConfig">;
-const ResumePreviewer = (props: IProps) => {
-  const { resumeConfig } = props;
+type IProps = Pick<Resume, "resumeConfig"> & {
+  previewMode?: boolean;
+  _id: string
+} & HTMLProps<any>;
+const ResumePreviewer = (props: IProps) => {  
+  const { resumeConfig,_id, ...rest } = props;
   const { personalInfo, title, groupConfig } = resumeConfig;
   const { leftPart, rightPart } = personalInfo;
   return (
-    <div className="resume-previewer">
+    <div
+      {...rest}
+      id={_id}
+      className={cx("resume-previewer")}
+    >
       <div className="title block-content">{title}</div>
       <div className="personal-info block-content">
         {[
@@ -22,17 +30,11 @@ const ResumePreviewer = (props: IProps) => {
           return (
             <div className={className} key={className}>
               {ensureArray(partItem).map((item) => {
-                const { content, icon, clickAble } = item;
+                const { content, icon } = item;
                 return (
                   <div className="part-item" key={content}>
                     <span className={`${iconfontCx(icon)} icon`}></span>
-                    {clickAble ? (
-                      <a className="content" href={content} target="_blank">
-                        {content}
-                      </a>
-                    ) : (
-                      <span className="content">{content}</span>
-                    )}
+                    <span className="content">{content}</span>
                   </div>
                 );
               })}

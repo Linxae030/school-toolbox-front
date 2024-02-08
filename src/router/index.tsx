@@ -24,7 +24,11 @@ const routes: RouteObject[] = [
         element: <Resume />,
         children: [
           {
-            path: "/resume/edit",
+            path: "/resume/edit/:_id",
+            element: <ResumeEdit />,
+          },
+          {
+            path: "/resume/create",
             element: <ResumeEdit />,
           },
           {

@@ -13,4 +13,6 @@ export interface AutoTimeStamp {
 
 export interface MongooseDoc {
   _id: string;
+  createdAt: string;
+  updatedAt: string;
 }

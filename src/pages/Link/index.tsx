@@ -20,7 +20,7 @@ const Link = observer(() => {
     linkStore.findAllCateOpr();
   }, [linkStore]);
 
-  const formModalHandler = useFormModal<FieldType>();
+  const formModalHandler = useFormModal();
 
   const handleCreateCate = async (name: string) => {
     await createCateOpr({ name });
@@ -51,7 +51,7 @@ const Link = observer(() => {
         <Button
           type="primary"
           onClick={() =>
-            formModalHandler.open({
+            formModalHandler.open<FieldType>({
               modalProps: {
                 title: "添加分类",
                 cancelText: "取消",

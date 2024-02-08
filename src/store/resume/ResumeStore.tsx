@@ -1,4 +1,4 @@
-import { autorun, makeAutoObservable, reaction, toJS } from "mobx";
+import { autorun, makeAutoObservable, reaction, runInAction, toJS } from "mobx";
 import {
   Button,
   Collapse,
@@ -7,23 +7,40 @@ import {
   Input,
   Popconfirm,
   Select,
+  message,
 } from "antd";
 import React, { ReactNode } from "react";
 import { CloseOutlined, EditOutlined } from "@ant-design/icons";
 import * as _ from "lodash";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
-import { GroupConfig, Resume, WithIcon } from "@/apis/resume";
-import { ICON_CLASSNAMES_MAP, ensureArray, iconfontCx } from "@/utils";
+import html2canvas from "html2canvas";
+import JsPDF from "jspdf";
+import {
+  GroupConfig,
+  Resume,
+  WithIcon,
+  createResume,
+  deleteResume,
+  findAllResume,
+  findOneResume,
+  updateResume,
+} from "@/apis/resume";
+import {
+  ICON_CLASSNAMES_MAP,
+  ensureArray,
+  handleResponse,
+  iconfontCx,
+} from "@/utils";
 import { FormModalHandler, useFormModal } from "@/components/Modal";
 import DynamicTagSelector from "@/pages/Resume/DynamicTagSelector";
+import { ArrayType } from "@/types";
 
 type PersonalInfoFieldType = WithIcon<string>[];
 type GroupFieldType = GroupConfig;
 
 const defaultResumeData = {
-  name: "新的简历",
-  version: "1",
+  resumeName: "新的简历",
   resumeConfig: {
     title: "XX工程师",
     groupConfig: [
@@ -32,10 +49,7 @@ const defaultResumeData = {
         contents: [
           {
             contentTitle: "XXXX信息工程大学",
-            timeRange: {
-              start: "20XX.09",
-              end: "20XX.6",
-            },
+            timeRange: ["2020.09.10", "2024.06.10"],
             detail: "我在XXXX读书",
           },
         ],
@@ -45,10 +59,7 @@ const defaultResumeData = {
         contents: [
           {
             contentTitle: "XXXX软件技术有限公司",
-            timeRange: {
-              start: "20XX.02.10",
-              end: "20XX.07.15",
-            },
+            timeRange: ["2020.09.10", "2024.06.10"],
             description: "前端开发实习生",
             detail: [
               "参与项目部分模块数据管理方案重构，使用开源库 mobx-state-tree 替代 mobx 规范开发流程，独立设计并实现 fetchModel 请求通用模型，为请求常见的 防抖、轮询、异步竞态、数据缓存、错误校验 等问题提供了标准解决方案。",
@@ -94,12 +105,10 @@ const defaultResumeData = {
         {
           icon: "fangzi",
           content: "www.resume.com",
-          clickAble: true,
         },
         {
           icon: "github",
           content: "https://github.com/resume666",
-          clickAble: true,
         },
       ],
     },
@@ -107,90 +116,9 @@ const defaultResumeData = {
 };
 
 export default class ResumeStore {
-  currentId: string = "123";
+  currentId: string = "";
 
-  resumeList: Resume[] = [
-    {
-      _id: "123",
-      user: "linxae",
-      name: "test1",
-      version: "1",
-      resumeConfig: {
-        title: "前端工程师",
-        groupConfig: [
-          {
-            subtitle: "教育背景",
-            contents: [
-              {
-                contentTitle: "成都信息工程大学",
-                timeRange: ["2020.09.10", "2024.06.10"],
-                description: ["成信大读书"],
-              },
-            ],
-          },
-          {
-            subtitle: "实习经验",
-            contents: [
-              {
-                contentTitle: "成都美团软件技术有限公司 | 餐饮 SaaS",
-                timeRange: ["2020.09.10", "2024.06.10"],
-                description: ["前端开发实习生"],
-                detail: [
-                  "参与项目部分模块数据管理方案重构，使用开源库 mobx-state-tree 替代 mobx 规范开发流程，独立设计并实现 fetchModel 请求通用模型，为请求常见的 防抖、轮询、异步竞态、数据缓存、错误校验 等问题提供了标准解决方案。",
-                  "参与日常需求开发，有 Web、App、小程序 三端需求开发经验，独立设计并完成多个中型需求，封装、改良数个全域公用组件，开发 日均 bug 率 0.2。",
-                  "主R某业务域的日常维护，处理线上工单，为用户提供线上排错并负责 bug 修复，对工作中业务侧场景有一定处理经验。",
-                ],
-              },
-            ],
-          },
-          {
-            subtitle: "项目经历",
-            contents: [
-              {
-                contentTitle: "molix-ui",
-                tags: ["Vue3", "Ts", "pnpm", "Monorepo", "SCSS"],
-                detail: [
-                  "负责项目基础结构搭建 , 使用 pnpm + Monorepo 项目依赖管理方式降低项目依赖管理成本。样式预处理选择 SCSS 结合 Bem 规范 , 提升项目样式规范性和开发效率。",
-                  "组件内部实现通用逻辑，预留 插槽、实例方法 提升组件可拓展、可自定义性。",
-                  "针对开发需求，封装了如 DOM操作、CSS预处理、类型断言 等一系列工具。",
-                  "各组件均有基于 Vitest 编写的单元测试，确保打包后的项目能够正常运行。",
-                ],
-                description: [
-                  "该项目是一个基于 Vue3 的业务组件库，旨在提高项目代码复用率及 UI 样式规范性。",
-                  "GitHub项目地址：https://github.com/molix-ui/Molix",
-                ],
-              },
-            ],
-          },
-        ],
-        personalInfo: {
-          leftPart: [
-            {
-              icon: "mian-renwu",
-              content: "高歌/男/2001.10",
-            },
-            {
-              icon: "weixin",
-              content: "gaoge949699002",
-            },
-          ],
-
-          rightPart: [
-            {
-              icon: "fangzi",
-              content: "www.linxae.com",
-              clickAble: true,
-            },
-            {
-              icon: "github",
-              content: "https://github.com/Linxae030",
-              clickAble: true,
-            },
-          ],
-        },
-      },
-    },
-  ];
+  resumeList: Resume[] = [];
 
   currentResumeData!: Resume;
 
@@ -202,29 +130,32 @@ export default class ResumeStore {
         (resume) => resume._id === this.currentId,
       );
       if (findResume) this.setCurrentResumeData(findResume);
-      else this.setCurrentResumeData(defaultResumeData as any);
+      else this.setCurrentResumeData(defaultResumeData as Resume);
     });
   }
 
-  get treeData() {
-    return this.formatTreeDataFromResume(toJS(this.currentResumeData));
-  }
+  getTreeData = (formModalHandler: FormModalHandler) => {
+    return this?.formatTreeDataFromResume?.(
+      toJS(this.currentResumeData),
+      formModalHandler,
+    );
+  };
 
   /** 设置当前简历数据 */
   private setCurrentResumeData = (resumeData: Resume) => {
     this.currentResumeData = resumeData;
   };
 
+  /** 根据path获取当前简历数据 */
+  private getResumeData = (path: string) => {
+    return toJS(_.get(this.currentResumeData, path));
+  };
+
   /** 修改当前简历数据 */
-  private modifyResumeData = (path: string, newValue: any) => {
+  modifyResumeData = (path: string, newValue: any) => {
     const newResumeData = _.cloneDeep(this.currentResumeData);
     _.set(newResumeData, path, newValue);
     this.setCurrentResumeData(newResumeData);
-  };
-
-  /** 根据path获取简历数据 */
-  private getResumeData = (path: string) => {
-    return toJS(_.get(this.currentResumeData, path));
   };
 
   pushPersonalInfo = (value: any, side: "left" | "right") => {
@@ -255,6 +186,10 @@ export default class ResumeStore {
 
   setCurrentId = (_id: string) => {
     this.currentId = _id;
+  };
+
+  resetResumeData = () => {
+    this.currentId = "";
   };
 
   /** 编辑标题 */
@@ -321,13 +256,97 @@ export default class ResumeStore {
     });
   };
 
+  /** 导出PNG */
+  handleExportPNG = (id: string) => {
+    html2canvas(document.getElementById(id)!, {
+      allowTaint: false,
+      useCORS: true, // 支持跨域图片的截取，不然图片截取不出来
+    }).then((canvas) => {
+      const link = document.createElement("a"); // 建立一个超连接对象实例
+      const event = new MouseEvent("click"); // 建立一个鼠标事件的实例
+      link.download = `${this.currentResumeData.resumeName}.png`; // 设置要下载的图片的名称
+      link.href = canvas.toDataURL(); // 将图片的URL设置到超连接的href中
+      link.dispatchEvent(event); // 触发超连接的点击事件
+    });
+  };
+
+  /** 导出PDF */
+  handleExportPDF = async (id: string) => {
+    const title = this.currentResumeData.resumeName;
+    const ele = document.getElementById(id);
+    // 根据dpi放大，防止图片模糊
+    const scale = window.devicePixelRatio > 1 ? window.devicePixelRatio : 2;
+    // 下载尺寸 a4 纸 比例
+    const pdf = new JsPDF("p", "pt", "a4");
+    let width = ele?.clientWidth ?? 0;
+    let height = ele?.clientHeight ?? 0;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    const contentWidth = width;
+    const contentHeight = height;
+
+    // 一页pdf显示html页面生成的canvas高度;
+    const pageHeight = (contentWidth / 592.28) * 841.89;
+    // 未生成pdf的html页面高度
+    let leftHeight = contentHeight;
+    // 页面偏移
+    let position = 0;
+    // a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+    const imgWidth = 595.28;
+    const imgHeight = (592.28 / contentWidth) * contentHeight;
+    const pdfCanvas = await html2canvas(ele!, {
+      useCORS: true,
+      canvas,
+      scale,
+      width,
+      height,
+      x: 0,
+      y: 0,
+    });
+    const imgDataUrl = pdfCanvas.toDataURL();
+
+    if (height > 14400) {
+      // 超出jspdf高度限制时
+      const ratio = 14400 / height;
+      // height = 14400;
+      width *= ratio;
+    }
+    console.log("contentWidth", contentWidth);
+    console.log("leftHeight", leftHeight, pageHeight);
+    console.log("ele", ele?.clientWidth);
+
+    // 缩放为 a4 大小 pdf.internal.pageSize 获取当前pdf设定的宽高
+    height = (height * pdf.internal.pageSize.getWidth()) / width;
+    width = pdf.internal.pageSize.getWidth();
+    if (leftHeight < pageHeight) {
+      pdf.addImage(imgDataUrl, "png", 0, 0, imgWidth, imgHeight);
+    } else {
+      // 分页
+      while (leftHeight > 0) {
+        pdf.addImage(imgDataUrl, "png", 0, position, imgWidth, imgHeight);
+        leftHeight -= pageHeight;
+        position -= 841.89;
+        // 避免添加空白页
+
+        if (leftHeight > 0) {
+          pdf.addPage();
+        }
+      }
+    }
+    // 导出下载
+    pdf.save(`${title}.pdf`);
+  };
+
   /** 将简历配置格式化成树形 */
-  private formatTreeDataFromResume = (resumeData: Resume) => {
+  private formatTreeDataFromResume = (
+    resumeData: Resume,
+    formModalHandler: FormModalHandler,
+  ) => {
     const { resumeConfig } = resumeData;
     const { title, groupConfig, personalInfo } = resumeConfig;
     const { leftPart, rightPart } = personalInfo;
-
-    const formModalHandler = useFormModal();
 
     const generateTreeNode = (
       title?: ReactNode,
@@ -344,90 +363,68 @@ export default class ResumeStore {
     });
 
     const convertPersonalInfo = () => {
-      const leftPartTreeData = generateTreeNode(
-        "左侧列表",
-        "2-1",
-        <span className={iconfontCx("zuo")}></span>,
-        [
-          ...leftPart.map((item, index) =>
-            generateTreeNode(
-              this.renderTitleWithOpr(
-                item.content,
-                () => this.deletePersonalInfo(index, "left"),
-                () =>
-                  this.handleEditPersonalInfo(
-                    formModalHandler,
-                    item,
-                    "left",
-                    index,
-                  ),
-              ),
-              `2-1-${index + 1}`,
-              <span className={iconfontCx(item.icon)}></span>,
-              [],
-            ),
-          ),
-          {
-            title: "新增一项",
-            key: "114-514",
-            icon: <span className={iconfontCx("tianjia")}></span>,
-            callBack: () =>
-              formModalHandler.open<PersonalInfoFieldType>({
-                modalProps: {
-                  title: "添加至左侧列表",
-                  onOk: (values) => this.pushPersonalInfo(values, "left"),
-                },
-                formChildren: this.renderPersonalInfoForm(),
-              }),
-          },
-        ],
-        undefined,
-      );
+      const baseConfig = [
+        {
+          side: "left" as const,
+          title: "左侧列表",
+          key: "2-1",
+          icon: <span className={iconfontCx("zuo")}></span>,
+        },
+        {
+          side: "right" as const,
+          title: "右侧列表",
+          key: "2-2",
+          icon: <span className={iconfontCx("you")}></span>,
+        },
+      ];
 
-      const rightPartTreeData = generateTreeNode(
-        "右侧列表",
-        "2-2",
-        <span className={iconfontCx("you")}></span>,
-        [
-          ...rightPart.map((item, index) =>
+      const genChildren = (config: ArrayType<typeof baseConfig>) => {
+        const { side, title, key, icon } = config;
+        const part = side === "left" ? leftPart : rightPart;
+        return generateTreeNode(title, key, icon, [
+          ...part.map((item, index) =>
             generateTreeNode(
               this.renderTitleWithOpr(
                 item.content,
-                () => this.deletePersonalInfo(index, "right"),
+                () => this.deletePersonalInfo(index, side),
                 () =>
                   this.handleEditPersonalInfo(
                     formModalHandler,
                     item,
-                    "right",
+                    side,
                     index,
                   ),
               ),
-              `2-2-${index + 1}`,
+              `${key}-${index + 1}`,
               <span className={iconfontCx(item.icon)}></span>,
               [],
             ),
           ),
           {
             title: "新增一项",
-            key: "114-515",
+            key: `114-51${key}`,
             icon: <span className={iconfontCx("tianjia")}></span>,
             callBack: () =>
               formModalHandler.open({
                 modalProps: {
-                  title: "添加至右侧列表",
-                  onOk: (values) => this.pushPersonalInfo(values, "right"),
+                  title: `添加至${title}`,
+                  onOk: (values) => this.pushPersonalInfo(values, side),
                 },
                 formChildren: this.renderPersonalInfoForm(),
               }),
           },
-        ],
+        ]);
+      };
+
+      const personalInfoTreeChildren = baseConfig.map((config) =>
+        genChildren(config),
       );
 
       return generateTreeNode(
         "个人信息",
         "2",
         <span className={iconfontCx("mian-renwu")}></span>,
-        [leftPartTreeData, rightPartTreeData],
+        personalInfoTreeChildren,
       );
     };
 
@@ -502,6 +499,7 @@ export default class ResumeStore {
     return treeData;
   };
 
+  /** 个人信息 modal form */
   private renderPersonalInfoForm = () => {
     // 遍历图标
     const options = Object.values(ICON_CLASSNAMES_MAP).map((name) => ({
@@ -522,17 +520,14 @@ export default class ResumeStore {
         >
           <Input placeholder="请输入内容" />
         </Form.Item>
-        <Form.Item
-          label="图标"
-          name="icon"
-          rules={[{ required: true, message: "请选择图标" }]}
-        >
+        <Form.Item label="图标" name="icon">
           <Select style={{ width: 80 }} options={options} />
         </Form.Item>
       </Form>
     );
   };
 
+  /** 标题 modal form */
   private renderTitleForm = () => {
     return (
       <Form
@@ -551,6 +546,7 @@ export default class ResumeStore {
     );
   };
 
+  /** 分组 modal form */
   private renderGroupForm = () => {
     return (
       <Form
@@ -755,6 +751,82 @@ export default class ResumeStore {
           )}
         </span>
       </span>
+    );
+  };
+
+  findAllResumeOpr = async () => {
+    const res = await findAllResume();
+    handleResponse(
+      res,
+      (res) => {
+        runInAction(() => {
+          const { data } = res;
+          this.resumeList = data;
+        });
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  findOneResumeOpr = async () => {
+    const res = await findOneResume(this.currentId);
+    handleResponse(
+      res,
+      (res) => {
+        runInAction(() => {
+          const { data } = res;
+          this.setCurrentResumeData(data);
+        });
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  createResumeOpr = async () => {
+    const res = await createResume(toJS(this.currentResumeData));
+    return handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  updateResumeOpr = async () => {
+    const res = await updateResume(toJS(this.currentResumeData));
+    return handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  deleteResumeOpr = async (_id: string) => {
+    const res = await deleteResume(_id);
+    return handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
     );
   };
 }

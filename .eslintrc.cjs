@@ -33,7 +33,8 @@ module.exports = {
     "import/prefer-default-export":"off",
     "no-underscore-dangle": "off",
     "no-nested-ternary": "off",
-    "no-empty": "off"
+    "no-empty": "off",
+    "react-hooks/exhaustive-deps":"off"
   },
 };
 

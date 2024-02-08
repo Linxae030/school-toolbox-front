@@ -15,6 +15,7 @@ export enum LinkIconDisplayModeEnum {
 }
 
 export const ICON_CLASSNAMES_MAP = {
+  null: "",
   tianjia: "tianjia",
   biaoti: "biaoti",
   xiangxi: "xiangxi",

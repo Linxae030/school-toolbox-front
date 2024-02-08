@@ -6,3 +6,5 @@ export type WithMongoId<T> = T & {
 
 /** 去除 account */
 export type OmitAccount<T> = Omit<T, "account">;
+
+export type ArrayType<T> = T extends (infer U)[] ? U : never;

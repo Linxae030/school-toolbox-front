@@ -65,9 +65,9 @@ export const formatDirection = (direction: string) => {
 /** map 渲染通用 */
 export function mapRender<T>(
   dataSource: T[] | T | undefined,
-  renderFunc: (item: T) => ReactNode,
+  renderFunc: (item: T, index?: number) => ReactNode,
 ) {
-  return ensureArray(dataSource).map((item) => renderFunc(item));
+  return ensureArray(dataSource).map((item, index) => renderFunc(item, index));
 }
 
 /** 条件渲染 */
@@ -82,4 +82,17 @@ export function conditionalRender(
 /** 生成iconfont className */
 export const iconfontCx = (postfix?: string) => {
   return postfix ? `iconfont icon-${postfix}` : "";
+};
+
+export const formatISO = (timestamp: string) => {
+  const date = new Date(timestamp);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return formattedTime;
 };

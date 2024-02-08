@@ -6,7 +6,7 @@ type IProps = {
 const ConfigFormTree = (props: IProps) => {
   const { treeData } = props;
   return (
-    <div style={{ width: "80%" }}>
+    <div style={{ width: "90%" }}>
       <Tree
         showIcon
         defaultExpandAll

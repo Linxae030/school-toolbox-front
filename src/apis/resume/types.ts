@@ -16,7 +16,6 @@ export interface DividedPart<T> {
 export interface WithIcon<T> {
   icon?: string;
   content: T;
-  clickAble?: boolean;
 }
 
 export type TextContent = string;
@@ -74,11 +73,12 @@ export interface Resume extends MongooseDoc {
   /** 所属用户 */
   user: string;
   /** 简历名称 */
-  name: string;
-  /** 简历版本 */
-  version: string;
-  /** 父本id */
-  parentId?: string;
+  resumeName: string;
   /** 简历配置 */
   resumeConfig: ResumeConfig;
 }
+
+export type CreateResumePayload = Omit<Resume, "user">;
+export type UpdateResumePayload = Omit<Resume, "user">;
+export type FindAllResumeRes = Resume[];
+export type FindOneResumeRes = Resume;
