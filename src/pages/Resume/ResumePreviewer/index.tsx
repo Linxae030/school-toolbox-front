@@ -1,3 +1,6 @@
+/**
+ * @component 简历预览展示组件
+ */
 import { HTMLProps } from "react";
 import "./index.less";
 
@@ -14,6 +17,10 @@ const ResumePreviewer = (props: IProps) => {
   const { resumeConfig,_id, ...rest } = props;
   const { personalInfo, title, groupConfig } = resumeConfig;
   const { leftPart, rightPart } = personalInfo;
+  const layoutConfig = [
+    { className: "left-part", partItem: leftPart },
+    { className: "right-part", partItem: rightPart },
+  ]
   return (
     <div
       {...rest}
@@ -22,10 +29,7 @@ const ResumePreviewer = (props: IProps) => {
     >
       <div className="title block-content">{title}</div>
       <div className="personal-info block-content">
-        {[
-          { className: "left-part", partItem: leftPart },
-          { className: "right-part", partItem: rightPart },
-        ].map((item) => {
+        {mapRender(layoutConfig, (item) => {
           const { className, partItem } = item;
           return (
             <div className={className} key={className}>

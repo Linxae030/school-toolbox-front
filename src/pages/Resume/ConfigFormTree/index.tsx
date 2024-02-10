@@ -1,3 +1,6 @@
+/**
+ * @component 简历结构树形展示组件
+ */
 import { Tree } from "antd";
 
 type IProps = {
