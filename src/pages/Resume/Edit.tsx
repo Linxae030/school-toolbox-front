@@ -14,7 +14,7 @@ import ResumePreviewer from "./ResumePreviewer";
 import ConfigFormTree from "./ConfigFormTree";
 import useStore from "@/store";
 import HoverInput from "@/components/HoverInput";
-import ButtonGroup, { IButtonProps } from "@/components/ButtonGroup";
+import ButtonGroup, { GroupButtonItem } from "@/components/ButtonGroup";
 import { waitAndRefreshPage } from "@/utils";
 import { useFormModal } from "@/components/Modal";
 
@@ -54,7 +54,7 @@ const Edit = observer(() => {
     waitAndRefreshPage(navigate, 1);
   };
 
-  const operationButtons: IButtonProps[] = _.compact([
+  const operationButtons: GroupButtonItem[] = _.compact([
     {
       showPopconfirm: true,
       children: "保存",

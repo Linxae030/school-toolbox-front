@@ -49,6 +49,7 @@ const AppLayout: React.FC = observer(() => {
           onClick={(item) => navigate(item.key)}
         />
       </Sider>
+
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
@@ -70,6 +71,7 @@ const AppLayout: React.FC = observer(() => {
             overflow: "auto",
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
+            transform: "scale(1)",
           }}
         >
           <Outlet></Outlet>

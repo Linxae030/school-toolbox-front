@@ -4,14 +4,14 @@ import Dropdown, { DropdownButtonProps } from "antd/es/dropdown";
 import * as _ from "lodash";
 import { mapRender } from "../../utils/utils";
 
-export type IButtonProps = (ButtonProps | DropdownButtonProps) & {
+export type GroupButtonItem = (ButtonProps | DropdownButtonProps) & {
   isDropDown?: boolean;
   showPopconfirm?: boolean;
   popConfirmProps?: PopconfirmProps;
 };
 
 type IProps = {
-  buttons: IButtonProps[];
+  buttons: GroupButtonItem[];
 };
 
 const ButtonGroup = (props: IProps) => {

@@ -10,6 +10,7 @@ import {
   useRef,
   cloneElement,
   ReactElement,
+  ForwardRefRenderFunction,
 } from "react";
 import { createPortal, unmountComponentAtNode } from "react-dom";
 import { createRoot } from "react-dom/client";
@@ -39,7 +40,7 @@ export type FormModalHandler = {
 };
 
 export const FormModal = memo(
-  forwardRef((props: ModalProps, ref) => {
+  forwardRef((props, ref) => {
     // modal开关
     const [modalOpen, setModalOpen] = useState(false);
     // 保存注入的 prop

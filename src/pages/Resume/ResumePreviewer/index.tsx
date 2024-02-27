@@ -11,22 +11,18 @@ import GroupBlock from "./GroupBlock";
 
 type IProps = Pick<Resume, "resumeConfig"> & {
   previewMode?: boolean;
-  _id: string
+  _id: string;
 } & HTMLProps<any>;
-const ResumePreviewer = (props: IProps) => {  
-  const { resumeConfig,_id, ...rest } = props;
+const ResumePreviewer = (props: IProps) => {
+  const { resumeConfig, _id, ...rest } = props;
   const { personalInfo, title, groupConfig } = resumeConfig;
   const { leftPart, rightPart } = personalInfo;
   const layoutConfig = [
     { className: "left-part", partItem: leftPart },
     { className: "right-part", partItem: rightPart },
-  ]
+  ];
   return (
-    <div
-      {...rest}
-      id={_id}
-      className={cx("resume-previewer")}
-    >
+    <div {...rest} id={_id} className={cx("resume-previewer")}>
       <div className="title block-content">{title}</div>
       <div className="personal-info block-content">
         {mapRender(layoutConfig, (item) => {
