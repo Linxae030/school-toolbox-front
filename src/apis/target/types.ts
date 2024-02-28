@@ -13,14 +13,10 @@ export enum StageStatus {
 export interface StageStepConfig extends StepsProps {}
 
 export interface Stage extends StageBaseProps {
-  // /** 阶段名称 */
-  // stageName: string;
-  // /** 阶段内容 */
-  // stageContent: string;
-  // /** 阶段描述 */
-  // stageDesc: string;
-  // /** 阶段时间范围 */
-  // stageTimeRange: string[];
+  /** 阶段名称 */
+  stageName: string;
+  /** 阶段开始时间 */
+  stageTime: string;
   innerStepConfig?: StageStepConfig;
 }
 
@@ -32,3 +28,14 @@ export interface Target extends MongooseDoc {
   /** 目标阶段数组 */
   stages: Stage[];
 }
+
+export type CreateTargetPayload = {
+  targetName: string;
+};
+
+export type UpdateTargetPayload = {
+  targetId: string;
+  target: Target;
+};
+
+export type FindAllTargetRes = Target[];

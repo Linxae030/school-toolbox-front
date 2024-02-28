@@ -1,217 +1,128 @@
-import { makeAutoObservable, toJS } from "mobx";
-import { Steps } from "antd";
-import { StageStatus, Target } from "@/apis/target/types";
-import StageStep from "@/pages/Target/StageStep";
-
-const defaultTarget: Target = {
-  _id: "1",
-  createdAt: "2021-07-01",
-  updatedAt: "2021-07-01",
-  user: "linxae",
-  targetName: "大四下春招计划",
-  stages: [
-    {
-      children: "复习数据结构",
-      label: "2024-02-24",
-      color: StageStatus.DOING,
-      innerStepConfig: {
-        current: 1,
-        items: [
-          {
-            title: "线性表",
-            description: "复习线性表",
-          },
-          {
-            title: "树",
-            description: "复习树",
-          },
-          {
-            title: "图",
-            description: "复习图",
-          },
-        ],
-      },
-    },
-    {
-      children: "复习前端知识点",
-      label: "2024-03-01",
-      color: StageStatus.TODO,
-      innerStepConfig: {
-        current: 1,
-        items: [
-          {
-            title: "复习八股文",
-          },
-          {
-            title: "复习手写代码",
-          },
-        ],
-      },
-    },
-    {
-      children: "简历投递",
-      label: "2024-03-08",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "准备面试",
-      label: "2024-03-12",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "简历投递",
-      label: "2024-03-08",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "准备面试",
-      label: "2024-03-12",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "简历投递",
-      label: "2024-03-08",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "准备面试",
-      label: "2024-03-12",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "简历投递",
-      label: "2024-03-08",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "准备面试",
-      label: "2024-03-12",
-      color: StageStatus.TODO,
-    },
-  ],
-};
-const _defaultTarget: Target = {
-  _id: "2",
-  createdAt: "2021-07-01",
-  updatedAt: "2021-07-01",
-  user: "linxae",
-  targetName: "社招计划",
-  stages: [
-    {
-      children: "复习结构",
-      label: "2024-02-24",
-      color: StageStatus.DOING,
-      innerStepConfig: {
-        items: [
-          {
-            title: "线性表",
-            description: "复习线性表",
-          },
-          {
-            title: "树",
-            description: "复习树",
-          },
-          {
-            title: "图",
-            description: "复习图",
-          },
-        ],
-      },
-    },
-    {
-      children: "复习前端知识点",
-      label: "2024-03-01",
-      color: StageStatus.TODO,
-      innerStepConfig: {
-        current: 1,
-        items: [
-          {
-            title: "复习八股文",
-          },
-          {
-            title: "复习手写代码",
-          },
-        ],
-      },
-    },
-    {
-      children: "简历投递",
-      label: "2024-03-08",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "准备面试",
-      label: "2024-03-12",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "简历投递",
-      label: "2024-03-08",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "准备面试",
-      label: "2024-03-12",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "简历投递",
-      label: "2024-03-08",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "准备面试",
-      label: "2024-03-12",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "简历投递",
-      label: "2024-03-08",
-      color: StageStatus.TODO,
-    },
-    {
-      children: "准备面试",
-      label: "2024-03-12",
-      color: StageStatus.TODO,
-    },
-  ],
-};
-
-const defaultTargetList = [defaultTarget, _defaultTarget];
+import { autorun, makeAutoObservable } from "mobx";
+import { message } from "antd";
+import * as _ from "lodash";
+import dayjs from "dayjs";
+import { Target } from "@/apis/target/types";
+import { createTarget, findAllTarget, updateTarget } from "@/apis/target";
+import { handleResponse } from "@/utils";
 
 export default class TargetStore {
-  currentTargetId: string = "1";
+  currentTargetId!: string;
 
-  targetList: Target[] = defaultTargetList;
+  currentTarget: Target = {} as Target;
+
+  targetList: Target[] = [];
 
   constructor() {
     makeAutoObservable(this);
+    // currentId 改变重新渲染
+    autorun(() => {
+      const findTarget = this.targetList.find(
+        (target) => target._id === this.currentTargetId,
+      );
+      if (findTarget) this.setCurrentTarget(findTarget);
+      // else this.setCurrentTarget(_defaultTarget as Target);
+    });
   }
 
-  get currentTarget() {
-    return this.formatTarget(
-      this.targetList.find((item) => item._id === this.currentTargetId) ??
-        this.targetList[0],
-    );
-  }
+  setCurrentTarget = (target: Target) => {
+    this.currentTarget = target;
+  };
 
   setCurrentTargetId = (id: string) => {
     this.currentTargetId = id;
   };
 
-  formatTarget = (target: Target) => {
-    const { stages } = target;
-    target.stages = stages.map((stage) => {
-      const { innerStepConfig, children: title, ...restProps } = stage;
-      if (innerStepConfig) {
-        const formattedStage = {
-          ...restProps,
-          children: <StageStep title={title} config={innerStepConfig} />,
-        };
-        return formattedStage;
-      }
-      return stage;
+  /** 修改当前目标数据 */
+  modifyTargetData = (path: string, newValue: any) => {
+    const newTargetData = _.cloneDeep(this.currentTarget);
+    _.set(newTargetData, path, newValue);
+    this.setCurrentTarget(newTargetData);
+  };
+
+  pushNewStep = (index: number) => {
+    const { innerStepConfig } = this.currentTarget.stages[index];
+    if (innerStepConfig) {
+      innerStepConfig.items?.push({});
+    } else {
+      this.currentTarget.stages[index].innerStepConfig = {
+        current: 0,
+        items: [{}],
+      };
+    }
+
+    this.setCurrentTarget(this.currentTarget);
+  };
+
+  pushNewStage = () => {
+    this.currentTarget.stages.push({
+      stageName: "新阶段",
+      stageTime: dayjs().format("YYYY.MM.DD"),
     });
-    return target;
+    this.setCurrentTarget(this.currentTarget);
+  };
+
+  removeStage = (index: number) => {
+    this.currentTarget.stages.splice(index, 1);
+    this.setCurrentTarget(this.currentTarget);
+  };
+
+  removeStep = (stageIndex: number, stepIndex: number) => {
+    this.currentTarget.stages[stageIndex].innerStepConfig?.items?.splice(
+      stepIndex,
+      1,
+    );
+    this.currentTarget.stages[stageIndex].innerStepConfig!.current = 0;
+    this.setCurrentTarget(this.currentTarget);
+  };
+
+  createTargetOpr = async (targetName: string) => {
+    const res = await createTarget({ targetName });
+    return handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  findAllTargetOpr = async () => {
+    const res = await findAllTarget();
+    return handleResponse(
+      res,
+      (res) => {
+        this.targetList = res.data;
+        if (this.targetList.length > 0) {
+          const first = this.targetList[0];
+          this.currentTargetId = first._id;
+        }
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  updateTargetOpr = async () => {
+    const res = await updateTarget({
+      targetId: this.currentTargetId,
+      target: this.currentTarget,
+    });
+    return handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
   };
 }
