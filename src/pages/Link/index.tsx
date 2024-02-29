@@ -24,7 +24,7 @@ const Link = observer(() => {
 
   const handleCreateCate = async (name: string) => {
     await createCateOpr({ name });
-    waitAndRefreshPage(navigate, 1);
+    waitAndRefreshPage(navigate, 0.5);
   };
 
   const renderFormModalChildren = () => {

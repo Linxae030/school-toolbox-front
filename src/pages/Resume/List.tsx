@@ -23,7 +23,7 @@ const List = observer(() => {
 
   const handleDeleteResume = async (_id: string) => {
     await deleteResumeOpr(_id);
-    waitAndRefreshPage(navigate, 1);
+    waitAndRefreshPage(navigate, 0.5);
   };
 
   const renderCardTitle = (resumeName: string, _id: string) => {

@@ -37,6 +37,7 @@ const TargetConfigPanel = observer((props: IProps) => {
     removeStep,
     pushNewStage,
     updateTargetOpr,
+    deleteTargetOpr,
   } = store;
   const { _id, targetName, stages } = target;
   const { token } = theme.useToken();
@@ -49,7 +50,12 @@ const TargetConfigPanel = observer((props: IProps) => {
 
   const handleSaveTarget = async () => {
     await updateTargetOpr();
-    waitAndRefreshPage(navigate, 1);
+    waitAndRefreshPage(navigate, 0.5);
+  };
+
+  const handleDeleteTarget = async () => {
+    await deleteTargetOpr(_id);
+    waitAndRefreshPage(navigate, 0.5);
   };
 
   const operationButtons: GroupButtonItem[] = _.compact([
@@ -73,6 +79,7 @@ const TargetConfigPanel = observer((props: IProps) => {
       popConfirmProps: {
         title: "删除目标",
         description: "确定要删除该目标吗？",
+        onConfirm: handleDeleteTarget,
       },
     },
   ]);

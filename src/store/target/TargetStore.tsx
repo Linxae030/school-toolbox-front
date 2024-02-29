@@ -2,8 +2,15 @@ import { autorun, makeAutoObservable } from "mobx";
 import { message } from "antd";
 import * as _ from "lodash";
 import dayjs from "dayjs";
-import { Target } from "@/apis/target/types";
-import { createTarget, findAllTarget, updateTarget } from "@/apis/target";
+import { Stage, StageStatus, Target } from "@/apis/target/types";
+import {
+  completeStage,
+  completeStep,
+  createTarget,
+  deleteTarget,
+  findAllTarget,
+  updateTarget,
+} from "@/apis/target";
 import { handleResponse } from "@/utils";
 
 export default class TargetStore {
@@ -58,7 +65,8 @@ export default class TargetStore {
     this.currentTarget.stages.push({
       stageName: "新阶段",
       stageTime: dayjs().format("YYYY.MM.DD"),
-    });
+      status: StageStatus.TODO,
+    } as Stage);
     this.setCurrentTarget(this.currentTarget);
   };
 
@@ -78,7 +86,7 @@ export default class TargetStore {
 
   createTargetOpr = async (targetName: string) => {
     const res = await createTarget({ targetName });
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);
@@ -92,7 +100,7 @@ export default class TargetStore {
 
   findAllTargetOpr = async () => {
     const res = await findAllTarget();
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         this.targetList = res.data;
@@ -100,7 +108,6 @@ export default class TargetStore {
           const first = this.targetList[0];
           this.currentTargetId = first._id;
         }
-        message.success(res.msg);
       },
       (res) => {
         const { ret } = res;
@@ -114,7 +121,49 @@ export default class TargetStore {
       targetId: this.currentTargetId,
       target: this.currentTarget,
     });
-    return handleResponse(
+    handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  deleteTargetOpr = async (targetId: string) => {
+    const res = await deleteTarget(targetId);
+    handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  completeStageOpr = async (targetId: string, stageId: string) => {
+    const res = await completeStage(targetId, stageId);
+    handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  completeStepOpr = async (targetId: string, stageId: string) => {
+    const res = await completeStep(targetId, stageId);
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);

@@ -23,8 +23,8 @@ export function checkResponseSuccess<T>(
  */
 export function handleResponse<T>(
   res: CommonResponse<T>,
-  onSuccess?: (res: CommonSuccessResponse<T>) => any,
-  onFail?: (res: CommonFailResponse) => any,
+  onSuccess?: (res: CommonSuccessResponse<T>) => void,
+  onFail?: (res: CommonFailResponse) => void,
 ) {
   return checkResponseSuccess<T>(res) ? onSuccess?.(res) : onFail?.(res);
 }

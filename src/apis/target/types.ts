@@ -12,13 +12,15 @@ export enum StageStatus {
 
 export interface StageStepConfig extends StepsProps {}
 
-export interface Stage extends StageBaseProps {
-  /** 阶段名称 */
-  stageName: string;
-  /** 阶段开始时间 */
-  stageTime: string;
-  innerStepConfig?: StageStepConfig;
-}
+export type Stage = MongooseDoc &
+  StageBaseProps & {
+    /** 阶段名称 */
+    stageName: string;
+    /** 阶段开始时间 */
+    stageTime: string;
+    innerStepConfig?: StageStepConfig;
+    status: StageStatus;
+  };
 
 export interface Target extends MongooseDoc {
   /** 所属用户 */

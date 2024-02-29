@@ -27,7 +27,7 @@ export default class LinkStore {
 
   findAllCateOpr = async () => {
     const res = await findAllCate();
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         runInAction(() => {
@@ -45,7 +45,7 @@ export default class LinkStore {
   /** 创建链接 */
   createLinkOpr = async (payload: CreateLinkPayload) => {
     const res = await createLink(payload);
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);
@@ -60,7 +60,7 @@ export default class LinkStore {
   /** 删除链接 */
   deleteLinkOpr = async (payload: string) => {
     const res = await deleteLink(payload);
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);
@@ -75,7 +75,7 @@ export default class LinkStore {
   /** 更新链接 */
   updateLinkOpr = async (payload: UpdateLinkPayload) => {
     const res = await updateLink(payload);
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);
@@ -90,7 +90,7 @@ export default class LinkStore {
   /** 创建分类 */
   createCateOpr = async (payload: CreateCatePayload) => {
     const res = await createCate(payload);
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);
@@ -105,7 +105,7 @@ export default class LinkStore {
   /** 删除分类 */
   deleteCateOpr = async (payload: string) => {
     const res = await deleteCate(payload);
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);
@@ -120,7 +120,7 @@ export default class LinkStore {
   /** 更新分类 */
   updateCateOpr = async (payload: UpdateLinkPayload) => {
     const res = await updateCate(payload);
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);

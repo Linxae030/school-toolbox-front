@@ -790,7 +790,7 @@ export default class ResumeStore {
 
   createResumeOpr = async () => {
     const res = await createResume(toJS(this.currentResumeData));
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);
@@ -804,7 +804,7 @@ export default class ResumeStore {
 
   updateResumeOpr = async () => {
     const res = await updateResume(toJS(this.currentResumeData));
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);
@@ -818,7 +818,7 @@ export default class ResumeStore {
 
   deleteResumeOpr = async (_id: string) => {
     const res = await deleteResume(_id);
-    return handleResponse(
+    handleResponse(
       res,
       (res) => {
         message.success(res.msg);

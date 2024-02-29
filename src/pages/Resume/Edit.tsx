@@ -46,12 +46,12 @@ const Edit = observer(() => {
 
   const handleCreateResume = async () => {
     await createResumeOpr();
-    waitAndRefreshPage(navigate, 1);
+    waitAndRefreshPage(navigate, 0.5);
   };
 
   const handleSaveResume = async () => {
     await updateResumeOpr();
-    waitAndRefreshPage(navigate, 1);
+    waitAndRefreshPage(navigate, 0.5);
   };
 
   const operationButtons: GroupButtonItem[] = _.compact([

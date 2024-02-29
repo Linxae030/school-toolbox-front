@@ -28,6 +28,7 @@ const Target = observer(() => {
   const navigate = useNavigate();
   const { targetStore } = useStore();
   const {
+    currentTargetId,
     currentTarget,
     targetList,
     setCurrentTargetId,
@@ -57,7 +58,7 @@ const Target = observer(() => {
 
   const handleCreateTarget = async (targetName: string) => {
     await createTargetOpr(targetName);
-    waitAndRefreshPage(navigate, 1);
+    waitAndRefreshPage(navigate, 0.5);
   };
 
   useEffect(() => {
@@ -94,12 +95,16 @@ const Target = observer(() => {
         <ButtonGroup buttons={oprButtons} />
         <Menu
           className="menu"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={[currentTargetId]}
           items={menuItems}
           onClick={(item) => setCurrentTargetId(item.key)}
         />
       </div>
-      <TargetPreviewer target={currentTarget}></TargetPreviewer>
+      <TargetPreviewer
+        target={currentTarget}
+        store={targetStore}
+        navigate={navigate}
+      ></TargetPreviewer>
       <TargetConfigPanel
         target={currentTarget}
         store={targetStore}
