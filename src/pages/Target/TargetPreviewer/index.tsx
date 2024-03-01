@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.less";
-import { Button, Steps, Timeline, TimelineProps } from "antd";
+import { Button, Empty, Steps, Timeline, TimelineProps } from "antd";
 import { observer } from "mobx-react-lite";
 import { Stage, Target } from "@/apis/target/types";
 import StageStep from "../StageStep";
@@ -47,7 +47,11 @@ const TargetPreviewer = observer((props: IProps) => {
   };
   return (
     <div className="target-previewer">
-      <Timeline mode="left" items={formatStages(stages)} />
+      {target.targetName ? (
+        <Timeline mode="left" items={formatStages(stages)} />
+      ) : (
+        <Empty />
+      )}
     </div>
   );
 });

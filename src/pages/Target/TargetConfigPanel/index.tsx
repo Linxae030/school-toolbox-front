@@ -7,6 +7,7 @@ import {
   Collapse,
   CollapseProps,
   DatePicker,
+  Empty,
   Form,
   Input,
   theme,
@@ -40,6 +41,8 @@ const TargetConfigPanel = observer((props: IProps) => {
     deleteTargetOpr,
   } = store;
   const { _id, targetName, stages } = target;
+  console.log("target", target);
+
   const { token } = theme.useToken();
   const panelStyle: React.CSSProperties = {
     marginBottom: 12,
@@ -202,13 +205,15 @@ const TargetConfigPanel = observer((props: IProps) => {
   );
   return (
     <div className="target-config-panel">
-      <header className="header">
-        <HoverInput
-          value={targetName}
-          onChange={(val) => modifyTargetData("targetName", val.target.value)}
-        ></HoverInput>
-        <ButtonGroup buttons={operationButtons}></ButtonGroup>
-      </header>
+      {targetName ? (
+        <header className="header">
+          <HoverInput
+            value={targetName}
+            onChange={(val) => modifyTargetData("targetName", val.target.value)}
+          ></HoverInput>
+          <ButtonGroup buttons={operationButtons}></ButtonGroup>
+        </header>
+      ) : null}
       <main>
         <Collapse
           items={collapseItems}
@@ -216,15 +221,17 @@ const TargetConfigPanel = observer((props: IProps) => {
           bordered={false}
           style={{ background: token.colorBgContainer }}
         />
-        <Button
-          type="dashed"
-          onClick={() => {
-            pushNewStage();
-          }}
-          block
-        >
-          添加新阶段
-        </Button>
+        {targetName ? (
+          <Button
+            type="dashed"
+            onClick={() => {
+              pushNewStage();
+            }}
+            block
+          >
+            添加新阶段
+          </Button>
+        ) : null}
       </main>
     </div>
   );

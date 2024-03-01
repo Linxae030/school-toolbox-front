@@ -96,3 +96,16 @@ export const formatISO = (timestamp: string) => {
   const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   return formattedTime;
 };
+
+/**
+ *
+ * @param number
+ * @returns 转化后的时间
+ * @example 6 -> 6:00
+ */
+export function convertToTime(number: number) {
+  const hour = Math.floor(number);
+  const minutes = (number - hour) * 60;
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  return `${hour}:${formattedMinutes}`;
+}

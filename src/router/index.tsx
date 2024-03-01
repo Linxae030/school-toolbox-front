@@ -2,7 +2,7 @@ import { RouteObject } from "react-router-dom";
 import AppLayout from "@/layout";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
-import Timetable from "@/pages/Timetable";
+import CourseTable from "@/pages/CourseTable";
 import Resume from "@/pages/Resume";
 import Files from "@/pages/Files";
 import Target from "@/pages/Target";
@@ -18,7 +18,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "/timetable",
-        element: <Timetable />,
+        element: <CourseTable />,
       },
       {
         element: <Resume />,

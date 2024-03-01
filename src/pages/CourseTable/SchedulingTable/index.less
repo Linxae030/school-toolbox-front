@@ -1,0 +1,29 @@
+.scheduling-table {
+  position: relative;
+  overflow: hidden;
+  width: 80%;
+
+  .ant-table-cell {
+    position: relative;
+  }
+
+  .time-row {
+    height: 60px;
+  }
+
+  .time-line {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(100% - 67px);
+    height: 1px;
+    background-color: black;
+    pointer-events: none;
+
+    .time {
+      position: absolute;
+      top: -20px;
+    }
+    
+  }
+}

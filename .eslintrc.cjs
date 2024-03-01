@@ -34,7 +34,8 @@ module.exports = {
     "no-underscore-dangle": "off",
     "no-nested-ternary": "off",
     "no-empty": "off",
-    "react-hooks/exhaustive-deps":"off"
+    "react-hooks/exhaustive-deps":"off",
+    "consistent-return": "off"
   },
 };
 
