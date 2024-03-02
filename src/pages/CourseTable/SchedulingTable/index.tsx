@@ -1,12 +1,18 @@
-import React, { useState } from "react";
 import "./index.less";
-
+import React, { useState } from "react";
 import { Table, TableProps } from "antd";
+
 import CourseCard from "../CourseCard";
-import { Course, CourseInfo } from "@/apis/courseTable/types";
-import { WEEK_TABLE } from "../constants";
-import { convertToTime } from "@/utils";
-import { mapRender } from "../../../utils/utils";
+
+import {
+  BASE_HOUR,
+  FORM_HEADER_HEIGHT,
+  SECOND_PER_MINUTE,
+  WEEK_TABLE,
+} from "../constants";
+
+import type { Course, CourseInfo } from "@/apis/courseTable/types";
+import { convertToTime, mapRender } from "@/utils";
 
 interface IProps {
   courseInfo: CourseInfo;
@@ -24,14 +30,19 @@ const SchedulingTable: React.FC<IProps> = ({ courseInfo }) => {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const { top } = (e.target as HTMLElement).getBoundingClientRect();
-    // +60 是因为表头占了60px
-    setTimeLineOffsetTop(e.clientY - top + 60);
+    // +61 是因为表头占了61px
+    setTimeLineOffsetTop(e.clientY - top + FORM_HEADER_HEIGHT);
     setTimeLineDisplay(true);
   };
 
   const convertToTimeString = (value: number) => {
-    const baseHour = `${Math.floor(value / 60) + 5}`.padStart(2, "0");
-    const baseMinute = `${Math.floor(value % 60)}`.padStart(2, "0");
+    const baseHour = `${
+      Math.floor(value / SECOND_PER_MINUTE) + BASE_HOUR
+    }`.padStart(2, "0");
+    const baseMinute = `${Math.floor(value % SECOND_PER_MINUTE)}`.padStart(
+      2,
+      "0",
+    );
     return `${baseHour}:${baseMinute}`;
   };
 

@@ -1,40 +1,37 @@
 export const WEEK_TABLE = [
   {
     title: "周一",
-    dataIndex: "mondayCourses"
+    dataIndex: "mondayCourses",
   },
   {
     title: "周二",
-    dataIndex: "tuesdayCourses"
+    dataIndex: "tuesdayCourses",
   },
   {
     title: "周三",
-    dataIndex: "wednesdayCourses"
+    dataIndex: "wednesdayCourses",
   },
   {
     title: "周四",
-    dataIndex: "thursdayCourses"
+    dataIndex: "thursdayCourses",
   },
   {
     title: "周五",
-    dataIndex: "fridayCourses"
+    dataIndex: "fridayCourses",
   },
   {
     title: "周六",
-    dataIndex: "saturdayCourses"
+    dataIndex: "saturdayCourses",
   },
   {
     title: "周日",
-    dataIndex: "sundayCourses"
-  }
+    dataIndex: "sundayCourses",
+  },
 ];
 
-export const DAY_TIME = [
-  "周一",
-  "周二",
-  "周三",
-  "周四",
-  "周五",
-  "周六",
-  "周日",
-];
+/** 表头高度 */
+export const FORM_HEADER_HEIGHT = 61;
+/** 秒每分钟 */
+export const SECOND_PER_MINUTE = 60;
+/** 小时基数 */
+export const BASE_HOUR = 5;
