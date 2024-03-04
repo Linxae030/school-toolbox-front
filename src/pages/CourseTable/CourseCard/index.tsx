@@ -2,6 +2,7 @@ import React from "react";
 import "./index.less";
 import { Button, Checkbox, Form, Input, Popconfirm, TimePicker } from "antd";
 import dayjs, { Dayjs } from "dayjs";
+import { observer } from "mobx-react-lite";
 import { Course } from "@/apis/courseTable/types";
 import { useFormModal } from "@/components/Modal";
 import RangeInput from "@/components/RangeInput";
@@ -9,15 +10,16 @@ import RangeInput from "@/components/RangeInput";
 interface IProps {
   course: Course;
   // index: number;
-  onEdit: (curCourse: Course) => void;
+  onEdit: (curCourse: Course, courseId: string) => void;
   onDelete: (courseId: string) => void;
 }
 
 type CourseFormType = Course & { time: [Dayjs, Dayjs] };
 
-const CourseCard: React.FC<IProps> = (props) => {
+const CourseCard: React.FC<IProps> = observer((props) => {
   const { course, onEdit, onDelete } = props;
-  const { start, end, classroom, courseName, teacher, day } = course;
+  const { start, end, classroom, courseName, teacher, day, weekRange, _id } =
+    course;
   const format = "HH:mm";
   const formModalHandler = useFormModal();
 
@@ -49,12 +51,15 @@ const CourseCard: React.FC<IProps> = (props) => {
 
   const handleEdit = (value: CourseFormType) => {
     const { time, ...rest } = value;
-    onEdit({
-      ...rest,
-      start: [time[0].hour(), time[0].minute()],
-      end: [time[1].hour(), time[1].minute()],
-      day,
-    });
+    onEdit(
+      {
+        ...rest,
+        start: [time[0].hour(), time[0].minute()],
+        end: [time[1].hour(), time[1].minute()],
+        day,
+      },
+      course._id,
+    );
   };
 
   const renderEditCourseForm = () => {
@@ -134,7 +139,7 @@ const CourseCard: React.FC<IProps> = (props) => {
           <Popconfirm
             title="删除课程"
             description="确定删除该课程吗？"
-            onConfirm={() => onDelete("1")}
+            onConfirm={() => onDelete(_id)}
             okText="是"
             cancelText="否"
           >
@@ -179,6 +184,7 @@ const CourseCard: React.FC<IProps> = (props) => {
           <div>{courseName}</div>
           <div>{teacher}</div>
           <div>{classroom}</div>
+          <div>{`${weekRange[0]}周 - ${weekRange[1]}周`}</div>
         </div>
         <div>
           {`${fixNumber(course.start[0])}:${fixNumber(
@@ -188,6 +194,6 @@ const CourseCard: React.FC<IProps> = (props) => {
       </div>
     </div>
   );
-};
+});
 
 export default CourseCard;

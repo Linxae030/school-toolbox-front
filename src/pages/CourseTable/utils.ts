@@ -1,3 +1,4 @@
+import { Course } from "@/apis/courseTable/types";
 import { SECOND_PER_MINUTE, BASE_HOUR } from "./constants";
 
 /**
@@ -15,4 +16,36 @@ export const convertTimeOffsetToTimeString = (offset: number) => {
     "0",
   );
   return `${baseHour}:${baseMinute}`;
+};
+
+/**
+ * @description 检查是否有时间冲突
+ * @param newCourse 待检查课程
+ * @param courses 课程列表
+ * @returns {boolean}
+ */
+export const checkTimeConflict = (newCourse: Course, courses: Course[]) => {
+  for (let i = 0; i < courses.length; i += 1) {
+    const existingObject = courses[i];
+    const start1 = newCourse.start;
+    const end1 = newCourse.end;
+    const start2 = existingObject.start;
+    const end2 = existingObject.end;
+
+    if (start1[0] < end2[0] && end1[0] > start2[0]) {
+      // 时间段重叠，存在冲突
+      return true;
+    }
+    if (start1[0] === end2[0] && start1[1] < end2[1]) {
+      // 时间段边界重叠，存在冲突
+      return true;
+    }
+    if (end1[0] === start2[0] && end1[1] > start2[1]) {
+      // 时间段边界重叠，存在冲突
+      return true;
+    }
+  }
+
+  // 没有冲突
+  return false;
 };

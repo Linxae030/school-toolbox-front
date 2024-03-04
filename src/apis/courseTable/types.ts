@@ -10,14 +10,14 @@ export enum DayOfWeekEnum {
   Sunday,
 }
 
-export interface Course {
+export interface Course extends MongooseDoc {
   courseName: string;
   day: DayOfWeekEnum;
   classroom: string;
   start: [number, number];
   end: [number, number];
-  teacher?: string;
-  weekRange?: [number, number];
+  teacher: string;
+  weekRange: [number, number];
 }
 
 export interface WeekCourses {
@@ -31,3 +31,16 @@ export interface WeekCourses {
 }
 
 export type CourseInfo = WeekCourses & MongooseDoc;
+
+export type CreateLinkPayload = WeekCourses;
+export type DeleteCoursePayload = {
+  week: keyof WeekCourses;
+  id: string;
+};
+export type UpdateCoursePayload = {
+  week: keyof WeekCourses;
+  id: string;
+  course: Course;
+};
+
+export type FindAllCourseRes = CourseInfo;
