@@ -14,12 +14,13 @@ export interface Course {
   courseName: string;
   day: DayOfWeekEnum;
   classroom: string;
-  teacher?: string;
   start: [number, number];
   end: [number, number];
+  teacher?: string;
+  weekRange?: [number, number];
 }
 
-export interface CourseInfo extends MongooseDoc {
+export interface WeekCourses {
   mondayCourses?: Course[];
   tuesdayCourses?: Course[];
   wednesdayCourses?: Course[];
@@ -28,3 +29,5 @@ export interface CourseInfo extends MongooseDoc {
   saturdayCourses?: Course[];
   sundayCourses?: Course[];
 }
+
+export type CourseInfo = WeekCourses & MongooseDoc;

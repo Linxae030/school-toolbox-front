@@ -1,21 +1,22 @@
 import React from "react";
 import "./index.less";
-import { Checkbox, Form, Input, TimePicker } from "antd";
+import { Button, Checkbox, Form, Input, Popconfirm, TimePicker } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { Course } from "@/apis/courseTable/types";
 import { useFormModal } from "@/components/Modal";
+import RangeInput from "@/components/RangeInput";
 
 interface IProps {
   course: Course;
   // index: number;
   onEdit: (curCourse: Course) => void;
-  // removeCourse: (index: number) => void;
+  onDelete: (courseId: string) => void;
 }
 
 type CourseFormType = Course & { time: [Dayjs, Dayjs] };
 
 const CourseCard: React.FC<IProps> = (props) => {
-  const { course, onEdit } = props;
+  const { course, onEdit, onDelete } = props;
   const { start, end, classroom, courseName, teacher, day } = course;
   const format = "HH:mm";
   const formModalHandler = useFormModal();
@@ -63,16 +64,52 @@ const CourseCard: React.FC<IProps> = (props) => {
         wrapperCol={{ span: 12 }}
         style={{ maxWidth: 600 }}
       >
-        <Form.Item label="课程名" name="courseName">
+        <Form.Item
+          label="课程名"
+          name="courseName"
+          rules={[
+            {
+              required: true,
+              message: "请输入课程名",
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label="教师" name="teacher">
+        <Form.Item
+          label="教师"
+          name="teacher"
+          rules={[
+            {
+              required: true,
+              message: "请输入教师名",
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label="教室" name="classroom">
+        <Form.Item
+          label="教室"
+          name="classroom"
+          rules={[
+            {
+              required: true,
+              message: "请输入教室",
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label="时间" name="time">
+        <Form.Item
+          label="时间"
+          name="time"
+          rules={[
+            {
+              required: true,
+              message: "请选择课程时间",
+            },
+          ]}
+        >
           <TimePicker.RangePicker
             format={format}
             disabledTime={() => ({
@@ -80,6 +117,31 @@ const CourseCard: React.FC<IProps> = (props) => {
             })}
             placeholder={["开始时间", "结束时间"]}
           />
+        </Form.Item>
+        <Form.Item
+          label="周数"
+          name="weekRange"
+          rules={[
+            {
+              required: true,
+              message: "请选择课程周数",
+            },
+          ]}
+        >
+          <RangeInput />
+        </Form.Item>
+        <Form.Item label="操作">
+          <Popconfirm
+            title="删除课程"
+            description="确定删除该课程吗？"
+            onConfirm={() => onDelete("1")}
+            okText="是"
+            cancelText="否"
+          >
+            <Button danger type="primary">
+              删除
+            </Button>
+          </Popconfirm>
         </Form.Item>
       </Form>
     );
@@ -104,22 +166,25 @@ const CourseCard: React.FC<IProps> = (props) => {
 
   return (
     <div
-      className="course-content"
+      className="course-card"
       style={{
         top: `${getOffsetTop(start)}px`,
         height: `${getHeightRatio(start, end)}px`,
       }}
-      onClick={handleClick}
+      onMouseMove={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
     >
-      <div>
-        <div>{courseName}</div>
-        <div>{teacher}</div>
-        <div>{classroom}</div>
-      </div>
-      <div>
-        {`${fixNumber(course.start[0])}:${fixNumber(
-          course.start[1],
-        )} - ${fixNumber(course.end[0])}:${fixNumber(course.end[1])}`}
+      <div className="course-content" onClick={handleClick}>
+        <div>
+          <div>{courseName}</div>
+          <div>{teacher}</div>
+          <div>{classroom}</div>
+        </div>
+        <div>
+          {`${fixNumber(course.start[0])}:${fixNumber(
+            course.start[1],
+          )} - ${fixNumber(course.end[0])}:${fixNumber(course.end[1])}`}
+        </div>
       </div>
     </div>
   );
