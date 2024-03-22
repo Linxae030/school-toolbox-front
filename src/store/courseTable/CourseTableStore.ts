@@ -1,9 +1,22 @@
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { Course, CourseInfo, CreateLinkPayload, WeekCourses } from "@/apis/courseTable/types";
 import * as _ from "lodash";
-import { createCourse, findAllCourses, updateCourse } from "@/apis/courseTable";
-import { handleResponse } from "@/utils";
 import { message } from "antd";
+import {
+  Course,
+  CourseInfo,
+  CreateLinkPayload,
+  UpdateCoursePayload,
+  UpdateWeekPayload,
+  WeekCourses,
+  WeekCoursesInfo,
+} from "@/apis/courseTable/types";
+import {
+  createCourse,
+  findAllCourses,
+  updateCourse,
+  updateWeek,
+} from "@/apis/courseTable";
+import { handleResponse } from "@/utils";
 import { deleteCourse } from "../../apis/courseTable/index";
 
 export default class CourseTableStore {
@@ -21,7 +34,7 @@ export default class CourseTableStore {
     const res = await findAllCourses();
     handleResponse(
       res,
-      res => {
+      (res) => {
         runInAction(() => {
           const { data } = res;
           this.courseInfo = data ?? {
@@ -35,7 +48,7 @@ export default class CourseTableStore {
           };
         });
       },
-      res => {
+      (res) => {
         const { ret } = res;
         message.error(ret);
       },
@@ -47,10 +60,10 @@ export default class CourseTableStore {
     const res = await createCourse(rest);
     handleResponse(
       res,
-      res => {
+      (res) => {
         message.success(res.msg);
       },
-      res => {
+      (res) => {
         const { ret } = res;
 
         message.error(ret);
@@ -58,31 +71,45 @@ export default class CourseTableStore {
     );
   };
 
-  deleteCourseOpr = async (week: keyof WeekCourses, id: string) => {
+  deleteCourseOpr = async (week: keyof WeekCoursesInfo, id: string) => {
     const res = await deleteCourse({ week, id });
     handleResponse(
       res,
-      res => {
+      (res) => {
         message.success(res.msg);
       },
-      res => {
+      (res) => {
         const { ret } = res;
         message.error(ret);
       },
     );
   };
 
-  updateCourseOpr = async (payload: { week: keyof WeekCourses; id: string; course: Course }) => {
+  updateCourseOpr = async (payload: UpdateCoursePayload) => {
     const res = await updateCourse(payload);
     handleResponse(
       res,
-      res => {
+      (res) => {
         message.success(res.msg);
       },
-      res => {
+      (res) => {
         const { ret } = res;
         message.error(ret);
       },
     );
-  }
+  };
+
+  updateWeekOpr = async (payload: UpdateWeekPayload) => {
+    const res = await updateWeek(payload);
+    handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
 }

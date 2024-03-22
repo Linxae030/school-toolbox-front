@@ -49,3 +49,9 @@ export const checkTimeConflict = (newCourse: Course, courses: Course[]) => {
   // 没有冲突
   return false;
 };
+
+export const convertTimeArrToString = (timeArray: number[]) => {
+  const hour = `${timeArray[0]}`.padStart(2, "0");
+  const minute = `${timeArray[1]}`.padStart(2, "0");
+  return `${hour}:${minute}`;
+};

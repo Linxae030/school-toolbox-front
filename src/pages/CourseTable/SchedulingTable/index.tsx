@@ -15,7 +15,12 @@ import {
   WEEK_TABLE,
 } from "../constants";
 
-import type { Course, CourseInfo, WeekCourses } from "@/apis/courseTable/types";
+import type {
+  Course,
+  CourseInfo,
+  WeekCourses,
+  WeekCoursesInfo,
+} from "@/apis/courseTable/types";
 import { convertToTime, ensureArray, mapRender } from "@/utils";
 import { useFormModal } from "@/components/Modal";
 import CourseTableStore from "@/store/courseTable/CourseTableStore";
@@ -23,7 +28,7 @@ import RangeInput from "@/components/RangeInput";
 import { checkTimeConflict, convertTimeOffsetToTimeString } from "../utils";
 
 interface IProps {
-  currentWeek: number;
+  previewWeek: number;
   courseInfo: CourseInfo;
   handleCreate: (course: Course, dataIndex: keyof WeekCourses) => void;
   handleDelete: (courseId: string, dataIndex: keyof WeekCourses) => void;
@@ -43,7 +48,7 @@ type DataType = {
 } & CourseInfo;
 
 const SchedulingTable: React.FC<IProps> = observer(
-  ({ currentWeek, courseInfo, handleCreate, handleDelete, handleEdit }) => {
+  ({ previewWeek, courseInfo, handleCreate, handleDelete, handleEdit }) => {
     const [timeLineOffsetTop, setTimeLineOffsetTop] = useState(0);
     const [timeLineDisplay, setTimeLineDisplay] = useState(false);
     const [timeOffsetLeft, setTimeOffsetLeft] = useState(0);
@@ -212,13 +217,13 @@ const SchedulingTable: React.FC<IProps> = observer(
           <>
             {mapRender(record, (course) => {
               const { weekRange } = course;
-              console.log("currentWeek", currentWeek);
 
               if (
-                (weekRange[0] > currentWeek || weekRange[1] < currentWeek) &&
-                currentWeek !== 0
+                (weekRange[0] > previewWeek || weekRange[1] < previewWeek) &&
+                previewWeek !== 0
               )
                 return null;
+
               return (
                 <CourseCard
                   course={course}

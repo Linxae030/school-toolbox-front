@@ -4,6 +4,7 @@ import {
   DeleteCoursePayload,
   FindAllCourseRes,
   UpdateCoursePayload,
+  UpdateWeekPayload,
 } from "./types";
 
 export const findAllCourses = () => {
@@ -24,6 +25,12 @@ export const deleteCourse = (payload: DeleteCoursePayload) => {
 
 export const updateCourse = (payload: UpdateCoursePayload) => {
   return LinRequest.post("course/update", {
+    data: payload,
+  });
+};
+
+export const updateWeek = (payload: UpdateWeekPayload) => {
+  return LinRequest.post("course/updateWeek", {
     data: payload,
   });
 };

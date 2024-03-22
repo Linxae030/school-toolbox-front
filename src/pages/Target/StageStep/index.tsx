@@ -9,13 +9,24 @@ import { conditionalRender, ensureArray } from "@/utils";
 type IProps = {
   title: React.ReactNode;
   stageStepConfig?: StageStepConfig;
+  isComplete: boolean;
+  isNew: boolean;
+  showComplete: boolean;
   handleCompleteStage?: () => void;
   handleCompleteStep?: () => void;
 };
 
 const StageStep = observer((props: IProps) => {
-  const { title, stageStepConfig, handleCompleteStage, handleCompleteStep } =
-    props;
+  const {
+    title,
+    stageStepConfig,
+    isComplete,
+    isNew,
+    showComplete,
+    handleCompleteStage,
+    handleCompleteStep,
+  } = props;
+  console.log("isComplete", isComplete);
   const { items, current, ...rest } = stageStepConfig ?? {};
   const formatItems = ensureArray(items).map((item, index) => {
     if (index === current) {
@@ -28,12 +39,14 @@ const StageStep = observer((props: IProps) => {
             }}
           >
             <span className="title-text">{item.title}</span>
-            <CheckSuccessIcon
-              popconfirmConfig={{
-                title: "确认将该步骤标记为为完成吗？",
-                onConfirm: handleCompleteStep,
-              }}
-            />
+            {!(item as any).new && showComplete ? (
+              <CheckSuccessIcon
+                popconfirmConfig={{
+                  title: "确认将该步骤标记为为完成吗？",
+                  onConfirm: handleCompleteStep,
+                }}
+              />
+            ) : null}
           </span>
         ),
       };
@@ -44,12 +57,14 @@ const StageStep = observer((props: IProps) => {
     <div className="stage-step">
       <div className="title">
         <span className="title-text">{title}</span>
-        <CheckSuccessIcon
-          popconfirmConfig={{
-            title: "确认将该步骤标记为为完成吗？",
-            onConfirm: handleCompleteStage,
-          }}
-        />
+        {showComplete ? (
+          <CheckSuccessIcon
+            popconfirmConfig={{
+              title: "确认将该步骤标记为为完成吗？",
+              onConfirm: handleCompleteStage,
+            }}
+          />
+        ) : null}
       </div>
       {conditionalRender(stageStepConfig, () => (
         <Steps

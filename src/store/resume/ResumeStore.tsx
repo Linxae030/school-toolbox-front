@@ -803,6 +803,9 @@ export default class ResumeStore {
   };
 
   updateResumeOpr = async () => {
+    if (!this.currentResumeData.resumeName) {
+      return message.error("简历名称不能为空");
+    }
     const res = await updateResume(toJS(this.currentResumeData));
     handleResponse(
       res,

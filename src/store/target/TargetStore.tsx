@@ -11,7 +11,7 @@ import {
   findAllTarget,
   updateTarget,
 } from "@/apis/target";
-import { handleResponse } from "@/utils";
+import { ensureArray, handleResponse } from "@/utils";
 
 export default class TargetStore {
   currentTargetId!: string;
@@ -32,6 +32,12 @@ export default class TargetStore {
     });
   }
 
+  get firstUnCompleteIndex() {
+    return ensureArray(this.currentTarget.stages).findIndex(
+      (stage) => stage.status === StageStatus.DOING,
+    );
+  }
+
   setCurrentTarget = (target: Target) => {
     this.currentTarget = target;
   };
@@ -50,11 +56,21 @@ export default class TargetStore {
   pushNewStep = (index: number) => {
     const { innerStepConfig } = this.currentTarget.stages[index];
     if (innerStepConfig) {
-      innerStepConfig.items?.push({});
+      innerStepConfig.items?.push({
+        title: "新步骤",
+        // @ts-expect-error 标识是否是新添加的步骤，新添加的不能完成
+        new: true,
+      });
     } else {
       this.currentTarget.stages[index].innerStepConfig = {
         current: 0,
-        items: [{}],
+        items: [
+          {
+            title: "新步骤",
+            // @ts-expect-error 标识是否是新添加的步骤，新添加的不能完成
+            new: true,
+          },
+        ],
       };
     }
 
@@ -65,8 +81,14 @@ export default class TargetStore {
     this.currentTarget.stages.push({
       stageName: "新阶段",
       stageTime: dayjs().format("YYYY.MM.DD"),
-      status: StageStatus.TODO,
-    } as Stage);
+      status:
+        this.firstUnCompleteIndex === this.currentTarget.stages.length ||
+        this.firstUnCompleteIndex === -1
+          ? StageStatus.DOING
+          : StageStatus.TODO,
+      new: true,
+    } as any);
+    this.pushNewStep(this.currentTarget.stages.length - 1);
     this.setCurrentTarget(this.currentTarget);
   };
 

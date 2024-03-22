@@ -9,7 +9,8 @@ import {
   FilePdfOutlined,
   SendOutlined,
 } from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { message } from "antd";
 import ResumePreviewer from "./ResumePreviewer";
 import ConfigFormTree from "./ConfigFormTree";
 import useStore from "@/store";
@@ -24,6 +25,9 @@ const Edit = observer(() => {
   const formModalHandler = useFormModal();
 
   const { resumeStore } = useStore();
+
+  /** 是否是编辑页 */
+  const isEdit = !!_id;
 
   const {
     currentResumeData,
@@ -45,28 +49,48 @@ const Edit = observer(() => {
   };
 
   const handleCreateResume = async () => {
+    if (!currentResumeData.resumeName) {
+      message.error("简历名称不能为空");
+      return;
+    }
     await createResumeOpr();
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
 
   const handleSaveResume = async () => {
+    if (!currentResumeData.resumeName) {
+      message.error("简历名称不能为空");
+      return;
+    }
     await updateResumeOpr();
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
 
   const operationButtons: GroupButtonItem[] = _.compact([
-    {
-      showPopconfirm: true,
-      children: "保存",
-      type: "primary",
-      icon: <FileOutlined />,
-      popConfirmProps: {
-        title: "保存简历",
-        description: "确定要保存该简历吗？",
-        onConfirm: handleSaveResume,
-      },
-    },
-    _id
+    isEdit
+      ? {
+          showPopconfirm: true,
+          children: "保存",
+          type: "primary",
+          icon: <FileOutlined />,
+          popConfirmProps: {
+            title: "保存简历",
+            description: "确定要保存该简历吗？",
+            onConfirm: handleSaveResume,
+          },
+        }
+      : {
+          showPopconfirm: true,
+          children: "新建",
+          type: "primary",
+          icon: <FileOutlined />,
+          popConfirmProps: {
+            title: "新建简历",
+            description: "确定要新建该简历吗？",
+            onConfirm: handleCreateResume,
+          },
+        },
+    isEdit
       ? {
           showPopconfirm: true,
           children: "另存为",

@@ -20,7 +20,8 @@ export interface Course extends MongooseDoc {
   weekRange: [number, number];
 }
 
-export interface WeekCourses {
+export interface WeekCoursesInfo {
+  currentWeek: string;
   mondayCourses?: Course[];
   tuesdayCourses?: Course[];
   wednesdayCourses?: Course[];
@@ -30,17 +31,23 @@ export interface WeekCourses {
   sundayCourses?: Course[];
 }
 
-export type CourseInfo = WeekCourses & MongooseDoc;
+export type WeekCourses = Omit<WeekCoursesInfo, "currentWeek">;
 
-export type CreateLinkPayload = WeekCourses;
+export type CourseInfo = WeekCoursesInfo & MongooseDoc;
+
+export type CreateLinkPayload = WeekCoursesInfo;
 export type DeleteCoursePayload = {
-  week: keyof WeekCourses;
+  week: keyof WeekCoursesInfo;
   id: string;
 };
 export type UpdateCoursePayload = {
-  week: keyof WeekCourses;
+  week: keyof WeekCoursesInfo;
   id: string;
   course: Course;
+};
+
+export type UpdateWeekPayload = {
+  week: number;
 };
 
 export type FindAllCourseRes = CourseInfo;

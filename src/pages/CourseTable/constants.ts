@@ -1,4 +1,4 @@
-import { WeekCourses } from "@/apis/courseTable/types";
+import { WeekCourses, WeekCoursesInfo } from "@/apis/courseTable/types";
 
 export const WEEK_TABLE: {
   title: string;

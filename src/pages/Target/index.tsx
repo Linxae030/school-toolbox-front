@@ -58,7 +58,7 @@ const Target = observer(() => {
 
   const handleCreateTarget = async (targetName: string) => {
     await createTargetOpr(targetName);
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
 
   useEffect(() => {

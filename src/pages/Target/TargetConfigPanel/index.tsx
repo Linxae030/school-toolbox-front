@@ -10,6 +10,7 @@ import {
   Empty,
   Form,
   Input,
+  message,
   theme,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -32,6 +33,7 @@ type IProps = {
 const TargetConfigPanel = observer((props: IProps) => {
   const { target, store, navigate } = props;
   const {
+    currentTarget,
     modifyTargetData,
     pushNewStep,
     removeStage,
@@ -52,13 +54,26 @@ const TargetConfigPanel = observer((props: IProps) => {
   };
 
   const handleSaveTarget = async () => {
+    for (const stage of toJS(currentTarget).stages) {
+      if (!stage.stageName) {
+        message.error("存在阶段名称为空，请检查");
+        return;
+      }
+
+      for (const step of stage.innerStepConfig?.items ?? []) {
+        if (!step.title) {
+          message.error("存在步骤名称为空，请检查");
+          return;
+        }
+      }
+    }
     await updateTargetOpr();
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
 
   const handleDeleteTarget = async () => {
     await deleteTargetOpr(_id);
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
 
   const operationButtons: GroupButtonItem[] = _.compact([
@@ -88,7 +103,7 @@ const TargetConfigPanel = observer((props: IProps) => {
   ]);
   const collapseItems: CollapseProps["items"] = ensureArray(toJS(stages)).map(
     (stage, index) => ({
-      key: stage.stageTime,
+      key: index,
       label: stage.stageName,
       extra: (
         <CloseOutlined
@@ -117,7 +132,7 @@ const TargetConfigPanel = observer((props: IProps) => {
               }
             />
           </Form.Item>
-          <Form.Item label="时间范围" name="stageTime">
+          <Form.Item label="结束时间" name="stageTime">
             <DatePicker
               format="YYYY.MM.DD"
               onChange={(val, dateString) =>

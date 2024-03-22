@@ -49,7 +49,7 @@ const LinkItem = memo((props: IProps) => {
   /** 删除链接 */
   const handleDeleteLink = async () => {
     await deleteLinkOpr(_id);
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
   /** 编辑链接 */
   const handleEditLink = async (values: FieldType) => {
@@ -64,7 +64,7 @@ const LinkItem = memo((props: IProps) => {
       direction: _.trim(direction),
       _id,
     });
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
   /** 编辑链接 modalForm */
   const renderFormModalChildren = () => {

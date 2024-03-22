@@ -74,17 +74,17 @@ const LinkCard = memo((props: IProps) => {
       categoryId,
     });
 
-    await waitAndRefreshPage(navigate, 0.5);
+    await await waitAndRefreshPage(navigate, 0.5);
   };
   /** 删除分类 */
   const handleDeleteCate = async () => {
     await deleteCateOpr(categoryId);
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
   /** 编辑分类 */
   const handleEditCate = async (name: string) => {
     await updateCateOpr({ name, _id: categoryId });
-    waitAndRefreshPage(navigate, 0.5);
+    await waitAndRefreshPage(navigate, 0.5);
   };
   /** 创建链接 modalForm */
   const renderLinkFormModalChildren = () => {
