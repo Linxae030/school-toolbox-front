@@ -26,7 +26,6 @@ const StageStep = observer((props: IProps) => {
     handleCompleteStage,
     handleCompleteStep,
   } = props;
-  console.log("isComplete", isComplete);
   const { items, current, ...rest } = stageStepConfig ?? {};
   const formatItems = ensureArray(items).map((item, index) => {
     if (index === current) {

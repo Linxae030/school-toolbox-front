@@ -5,6 +5,7 @@ import LinkStore from "./link/LinkStore";
 import ResumeStore from "./resume/ResumeStore";
 import TargetStore from "./target/TargetStore";
 import CourseTableStore from "./courseTable/CourseTableStore";
+import FileStore from "./file/FileStore";
 
 class RootStore {
   userStore: UserStore;
@@ -19,6 +20,8 @@ class RootStore {
 
   courseTableStore: CourseTableStore;
 
+  fileStore: FileStore;
+
   constructor() {
     // 对引入进行来的子模块进行实例化操作，并挂载到RootStore上
     this.userStore = new UserStore();
@@ -27,6 +30,7 @@ class RootStore {
     this.resumeStore = new ResumeStore();
     this.targetStore = new TargetStore();
     this.courseTableStore = new CourseTableStore();
+    this.fileStore = new FileStore();
   }
 }
 

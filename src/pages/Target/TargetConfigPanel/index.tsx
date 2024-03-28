@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.less";
 import { FileOutlined, CloseOutlined } from "@ant-design/icons";
-import _, { remove } from "lodash";
+import _, { remove, uniqueId } from "lodash";
 import {
   Button,
   Collapse,
@@ -54,6 +54,10 @@ const TargetConfigPanel = observer((props: IProps) => {
   };
 
   const handleSaveTarget = async () => {
+    if (currentTarget.targetName === "") {
+      message.error("目标名为空，请检查");
+      return;
+    }
     for (const stage of toJS(currentTarget).stages) {
       if (!stage.stageName) {
         message.error("存在阶段名称为空，请检查");
@@ -103,7 +107,7 @@ const TargetConfigPanel = observer((props: IProps) => {
   ]);
   const collapseItems: CollapseProps["items"] = ensureArray(toJS(stages)).map(
     (stage, index) => ({
-      key: index,
+      key: stage._id,
       label: stage.stageName,
       extra: (
         <CloseOutlined
@@ -150,7 +154,8 @@ const TargetConfigPanel = observer((props: IProps) => {
                     size="small"
                     items={[
                       {
-                        key: field.key,
+                        // @ts-expect-error 有的有的
+                        key: field._id,
                         label: `步骤 ${field.name + 1}`,
                         extra: (
                           <CloseOutlined
@@ -197,7 +202,6 @@ const TargetConfigPanel = observer((props: IProps) => {
                         ),
                       },
                     ]}
-                    key={field.name}
                   />
                 ))}
                 <Button
@@ -220,15 +224,13 @@ const TargetConfigPanel = observer((props: IProps) => {
   );
   return (
     <div className="target-config-panel">
-      {targetName ? (
-        <header className="header">
-          <HoverInput
-            value={targetName}
-            onChange={(val) => modifyTargetData("targetName", val.target.value)}
-          ></HoverInput>
-          <ButtonGroup buttons={operationButtons}></ButtonGroup>
-        </header>
-      ) : null}
+      <header className="header">
+        <HoverInput
+          value={targetName}
+          onChange={(val) => modifyTargetData("targetName", val.target.value)}
+        ></HoverInput>
+        <ButtonGroup buttons={operationButtons}></ButtonGroup>
+      </header>
       <main>
         <Collapse
           items={collapseItems}

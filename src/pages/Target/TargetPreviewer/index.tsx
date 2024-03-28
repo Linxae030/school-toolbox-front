@@ -53,11 +53,7 @@ const TargetPreviewer = observer((props: IProps) => {
   };
   return (
     <div className="target-previewer">
-      {target.targetName ? (
-        <Timeline mode="left" items={formatStages(stages)} />
-      ) : (
-        <Empty />
-      )}
+      <Timeline mode="left" items={formatStages(stages)} />
     </div>
   );
 });

@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
+import { uniqueId } from "lodash";
 import { MenuItem } from "@/types";
 import getMenuItem from "@/utils/getMenuItem";
 import TargetPreviewer from "./TargetPreviewer";
