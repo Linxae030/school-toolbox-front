@@ -1,0 +1,19 @@
+.file-list {
+  overflow: hidden;
+  height: 100%;
+
+  .title {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .files-area {
+    display: grid;
+    overflow: auto;
+    height: 90%;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}

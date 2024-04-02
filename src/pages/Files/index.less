@@ -1,17 +1,31 @@
 .files {
   display: flex;
+  overflow: hidden;
   height: 100%;
 
   .side-bar {
     display: flex;
-    width: 30%;
-    min-width: 380px;
+    width: 25%;
+    min-width: 350px;
     height: 100%;
     flex-direction: column;
+
+    .operations {
+      height: 8%;
+      min-height: 50px;
+    }
   }
 
   .ant-divider {
     height: 100%;
     border-width: 5px;
+  }
+
+  .ant-spin-nested-loading {
+    height: 100%;
+  }
+
+  .ant-spin-container {
+    height: 100%;
   }
 }

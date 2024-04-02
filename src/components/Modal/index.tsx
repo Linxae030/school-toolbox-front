@@ -1,4 +1,4 @@
-import { Modal, type ModalProps } from "antd";
+import { Modal, Spin, type ModalProps } from "antd";
 import { useForm } from "antd/es/form/Form";
 import {
   memo,
@@ -55,16 +55,16 @@ export const FormModal = memo(
 
     const { onOk } = innerProps;
 
-    const onFinish = (values: any) => {
-      onOk?.(values);
+    const onFinish = async (values: any) => {
+      await onOk?.(values);
       formIns.resetFields();
+      setModalOpen(false);
     };
 
     const handleOk = async () => {
       // 校验后触发onFinish
       try {
         await formIns.validateFields();
-        setModalOpen(false);
         formIns.submit();
       } catch (e) {}
     };

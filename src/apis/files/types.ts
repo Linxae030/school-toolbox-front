@@ -1,14 +1,22 @@
 import { RadioProps } from "antd";
+import { MongooseDoc } from "@/types";
 
-export type TagType = string;
+export type TagType = MongooseDoc & {
+  name: string;
+};
 
 export type TagGroupConfig = {
   title: string;
   tags: TagType[];
 };
 
-export type File = {
+export type IFile = MongooseDoc & {
   fileName: string;
-  fileSize: string;
+  fileType: string;
+  filePath: string;
+  fileSize: number;
   tags: TagType[];
 };
+
+export type findAllTagsRes = TagType[];
+export type findAllFilesRes = IFile[];
