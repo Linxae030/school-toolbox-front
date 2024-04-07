@@ -1,15 +1,27 @@
 import "./index.less";
 import { Divider, Tag } from "antd";
+import Checkbox from "antd/es/checkbox";
 import { IFile, TagType } from "@/apis/files/types";
 import FileCard from "../FileCard";
 
 type IProps = {
   selectedTags: TagType[];
   files: IFile[];
+  onFileCheckChange?: (e: string[]) => void;
+  onFileDelete?: (_id: string) => void;
+  onFilesDelete?: (ids: string[]) => void;
+  onFileDownload?: (_id: string) => void;
 };
 
 const FileList = (props: IProps) => {
-  const { selectedTags, files } = props;
+  const {
+    selectedTags,
+    files,
+    onFileCheckChange,
+    onFileDelete,
+    onFilesDelete,
+    onFileDownload,
+  } = props;
   const hasTag = selectedTags.length !== 0;
 
   return (
@@ -33,9 +45,19 @@ const FileList = (props: IProps) => {
         style={{ width: "100%", height: 1, borderWidth: 1, margin: "10px 0" }}
       />
       <div className="files-area">
-        {files.map((file) => (
-          <FileCard key={file._id} file={file}></FileCard>
-        ))}
+        <Checkbox.Group
+          style={{ width: "100%" }}
+          onChange={onFileCheckChange as any}
+        >
+          {files.map((file) => (
+            <FileCard
+              key={file._id}
+              file={file}
+              onDelete={onFileDelete}
+              onDownload={onFileDownload}
+            ></FileCard>
+          ))}
+        </Checkbox.Group>
       </div>
     </div>
   );

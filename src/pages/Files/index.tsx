@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.less";
 import * as _ from "lodash";
 
 import {
-  CloseOutlined,
+  CloudDownloadOutlined,
+  DeleteOutlined,
   EditOutlined,
   FileAddOutlined,
   InboxOutlined,
@@ -11,14 +12,17 @@ import {
 } from "@ant-design/icons";
 
 import {
+  Button,
   Divider,
+  FloatButton,
   Form,
   Input,
+  message,
+  Popconfirm,
   Select,
   SelectProps,
   Spin,
   UploadFile,
-  UploadProps,
 } from "antd";
 
 import { observer } from "mobx-react-lite";
@@ -30,7 +34,9 @@ import FileList from "./FileList";
 import ButtonGroup, { GroupButtonItem } from "@/components/ButtonGroup";
 import useStore from "@/store";
 import { useFormModal } from "@/components/Modal";
-import { waitAndRefreshPage } from "@/utils";
+import { handleResponse, waitAndRefreshPage } from "@/utils";
+import { checkFileUnique } from "@/apis/files";
+import UniqueUpload from "@/components/UniqueUpload";
 
 type TagAddFormType = {
   name: string;
@@ -41,6 +47,10 @@ type UploadFileFormType = {
   files: UploadFile[];
 };
 
+type DownloadFilesFormType = {
+  zipName: string;
+};
+
 const Files = observer(() => {
   const { fileStore } = useStore();
   const formModalHandler = useFormModal();
@@ -49,15 +59,22 @@ const Files = observer(() => {
   const {
     files,
     tags,
-    selectedIds,
+    selectedTagIds,
+    selectedFileIds,
     selectedTags,
-    updateSelectedIds,
+    resetData,
+    updateSelectedTagIds,
+    updateSelectedFileIds,
     findAllTagsOpr,
     addTagOpr,
     updateTagOpr,
     deleteTagOpr,
     uploadFilesOpr,
     findFilesOpr,
+    deleteFileOpr,
+    deleteFilesOpr,
+    downloadFileOpr,
+    downloadFilesOpr,
   } = fileStore;
 
   const [isEditing, setIsEditing] = useState(false);
@@ -83,6 +100,7 @@ const Files = observer(() => {
 
   const renderUploadFileForm = () => {
     const normFile = (e: any) => {
+      console.log("e", e);
       if (Array.isArray(e)) {
         return e;
       }
@@ -119,19 +137,25 @@ const Files = observer(() => {
           getValueFromEvent={normFile}
           rules={[{ required: true, message: "请选择文件" }]}
         >
-          <Dragger
-            multiple
-            action="/file/uploadImage"
-            beforeUpload={(file, fileList) => {
-              return false;
-            }}
-          >
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">将文件拖到这里上传</p>
-            <p className="ant-upload-hint">支持单个或多个文件</p>
-          </Dragger>
+          <UniqueUpload />
+        </Form.Item>
+      </Form>
+    );
+  };
+
+  const renderDownloadFileForm = () => {
+    return (
+      <Form
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+      >
+        <Form.Item
+          label="压缩包名"
+          name="zipName"
+          rules={[{ required: true, message: "请输入压缩包名" }]}
+        >
+          <Input placeholder="请输入压缩包名" showCount maxLength={8} />
         </Form.Item>
       </Form>
     );
@@ -139,8 +163,12 @@ const Files = observer(() => {
 
   const onChange = async (ids: string[]) => {
     setLoading(true);
-    updateSelectedIds(ids);
+    updateSelectedTagIds(ids);
     await findFilesOpr(ids, () => setLoading(false));
+  };
+
+  const handleFileChecked = (ids: string[]) => {
+    updateSelectedFileIds(ids);
   };
 
   const handleEditTag = async (name: string, id: string) => {
@@ -168,6 +196,16 @@ const Files = observer(() => {
     await waitAndRefreshPage(navigate, 0.5);
   };
 
+  const handleDeleteFile = async (_id: string) => {
+    await deleteFileOpr(_id);
+    await waitAndRefreshPage(navigate, 0.5);
+  };
+
+  const handleDeleteFiles = async () => {
+    await deleteFilesOpr();
+    await waitAndRefreshPage(navigate, 0.5);
+  };
+
   const handleUploadFile = async () => {
     formModalHandler.open<UploadFileFormType>({
       modalProps: {
@@ -175,18 +213,53 @@ const Files = observer(() => {
         okText: "上传",
         cancelText: "取消",
         async onOk({ tags, files }) {
-          const formData = new FormData();
-          files.forEach((file) => {
-            formData.append("files", file.originFileObj as any);
+          console.log("files", files);
+          const res = await checkFileUnique(files.map((file) => file.name));
+          handleResponse(res, async (res) => {
+            const { repeatNames } = res.data;
+            if (repeatNames.length !== 0) {
+              const msg = `${repeatNames.join(
+                "、",
+              )} 已存在同名文件，请重新选择。`;
+              return message.error(msg, repeatNames.length * 1);
+            }
+            const formData = new FormData();
+            files.forEach((file) => {
+              formData.append("files", file.originFileObj as any);
+            });
+            tags.forEach((tag) => {
+              formData.append("tags", tag);
+            });
+            await uploadFilesOpr(formData);
+            await waitAndRefreshPage(navigate, 0.5);
           });
-          tags.forEach((tag) => {
-            formData.append("tags", tag);
-          });
-          await uploadFilesOpr(formData);
-          await waitAndRefreshPage(navigate, 0.5);
         },
       },
       formChildren: renderUploadFileForm(),
+    });
+  };
+
+  const handleDownloadFile = async (_id: string) => {
+    await downloadFileOpr(_id);
+  };
+
+  const handleDownloadFiles = async () => {
+    const { selectedFileIds } = fileStore;
+    if (selectedFileIds.length === 0) {
+      message.warning("尚未选择文件");
+      return;
+    }
+
+    formModalHandler.open<DownloadFilesFormType>({
+      modalProps: {
+        title: "下载文件压缩包",
+        okText: "保存",
+        cancelText: "取消",
+        async onOk({ zipName }) {
+          await downloadFilesOpr(selectedFileIds, zipName);
+        },
+      },
+      formChildren: renderDownloadFileForm(),
     });
   };
 
@@ -223,6 +296,9 @@ const Files = observer(() => {
     setLoading(true);
     findAllTagsOpr();
     findFilesOpr([], () => setLoading(false));
+    return () => {
+      resetData();
+    };
   }, []);
 
   return (
@@ -242,8 +318,37 @@ const Files = observer(() => {
       <Divider type="vertical" />
       <main style={{ flex: 1 }}>
         <Spin tip="Loading..." spinning={loading} style={{ height: "100%" }}>
-          <FileList selectedTags={selectedTags} files={files}></FileList>
+          <FileList
+            selectedTags={selectedTags}
+            files={files}
+            onFileCheckChange={handleFileChecked}
+            onFileDelete={handleDeleteFile}
+            onFilesDelete={handleDeleteFiles}
+            onFileDownload={handleDownloadFile}
+          ></FileList>
         </Spin>
+        <FloatButton.Group
+          shape="square"
+          style={{
+            right: 94,
+            display: selectedFileIds.length !== 0 ? "block" : "none",
+          }}
+        >
+          <FloatButton
+            icon={<CloudDownloadOutlined />}
+            onClick={handleDownloadFiles}
+          />
+          <Popconfirm
+            key="delete"
+            title="删除文件"
+            description="你确定要删除所选文件吗？"
+            okText="确定"
+            cancelText="取消"
+            onConfirm={handleDeleteFiles}
+          >
+            <FloatButton icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </FloatButton.Group>
       </main>
     </div>
   );

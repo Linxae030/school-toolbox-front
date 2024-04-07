@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Layout, Menu, Button, theme } from "antd";
+import { Layout, Menu, Button, theme, App } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import menuItems from "./config";

@@ -4,8 +4,13 @@ import * as _ from "lodash";
 import { IFile, TagType } from "@/apis/files/types";
 import {
   addTag,
+  deleteFile,
+  deleteFiles,
   deleteTag,
+  downloadFile,
+  downloadFiles,
   findAllTags,
+  findFile,
   findFiles,
   updateTag,
   uploadFiles,
@@ -17,18 +22,28 @@ export default class FileStore {
 
   tags: TagType[] = [];
 
-  selectedIds: string[] = [];
+  selectedTagIds: string[] = [];
+
+  selectedFileIds: string[] = [];
 
   get selectedTags() {
-    return this.tags.filter((tag) => this.selectedIds.includes(tag._id));
+    return this.tags.filter((tag) => this.selectedTagIds.includes(tag._id));
   }
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  updateSelectedIds = (ids: string[]) => {
-    this.selectedIds = ids;
+  updateSelectedTagIds = (ids: string[]) => {
+    this.selectedTagIds = ids;
+  };
+
+  updateSelectedFileIds = (ids: string[]) => {
+    this.selectedFileIds = ids;
+  };
+
+  checkFile = (id: string) => {
+    this.selectedFileIds = [...new Set([...this.selectedFileIds, id])];
   };
 
   findAllTagsOpr = async () => {
@@ -120,4 +135,45 @@ export default class FileStore {
       },
     );
   }, 1000);
+
+  deleteFileOpr = async (_id: string) => {
+    const res = await deleteFile(_id);
+    handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  deleteFilesOpr = async () => {
+    const res = await deleteFiles(this.selectedFileIds);
+    handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
+  };
+
+  downloadFileOpr = async (_id: string) => {
+    downloadFile(_id);
+  };
+
+  downloadFilesOpr = async (ids: string[], zipName: string) => {
+    await downloadFiles(ids, zipName);
+  };
+
+  resetData = () => {
+    this.selectedTagIds = [];
+    this.selectedFileIds = [];
+  };
 }

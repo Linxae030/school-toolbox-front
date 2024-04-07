@@ -20,3 +20,7 @@ export type IFile = MongooseDoc & {
 
 export type findAllTagsRes = TagType[];
 export type findAllFilesRes = IFile[];
+export type findFileRes = IFile;
+export type checkFileUniqueRes = {
+  repeatNames: string[];
+};
