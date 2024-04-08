@@ -12,8 +12,19 @@
   .files-area {
     display: grid;
     overflow: auto;
-    height: 90%;
+    height: 83%;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-template-rows: repeat(auto-fill, minmax(180px, 1fr));
+  }
+
+  .filter {
+    display: flex;
+    justify-content: space-between;
+
+    .keywords {
+      display: flex;
+      align-items: center;
+      width: 20%;
+    }
   }
 }

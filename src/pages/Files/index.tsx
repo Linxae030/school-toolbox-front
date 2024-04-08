@@ -37,6 +37,8 @@ import { useFormModal } from "@/components/Modal";
 import { handleResponse, waitAndRefreshPage } from "@/utils";
 import { checkFileUnique } from "@/apis/files";
 import UniqueUpload from "@/components/UniqueUpload";
+import FilterButton from "@/components/FilterButtons";
+import { FilterCondition } from "@/store/file";
 
 type TagAddFormType = {
   name: string;
@@ -58,11 +60,13 @@ const Files = observer(() => {
 
   const {
     files,
+    filteredFiles,
     tags,
     selectedTagIds,
     selectedFileIds,
     selectedTags,
     resetData,
+    setFilerCondition,
     updateSelectedTagIds,
     updateSelectedFileIds,
     findAllTagsOpr,
@@ -100,7 +104,6 @@ const Files = observer(() => {
 
   const renderUploadFileForm = () => {
     const normFile = (e: any) => {
-      console.log("e", e);
       if (Array.isArray(e)) {
         return e;
       }
@@ -111,6 +114,7 @@ const Files = observer(() => {
       label: tag.name,
       value: tag._id,
     }));
+
     return (
       <Form
         labelCol={{ span: 4 }}
@@ -263,28 +267,29 @@ const Files = observer(() => {
     });
   };
 
+  const handleFilterChange = (condition: FilterCondition) => {
+    console.log("condition", condition);
+    setFilerCondition(condition);
+  };
+
   const operationButtons: GroupButtonItem[] = _.compact([
     {
-      children: "上传文件",
       type: "primary",
       icon: <FileAddOutlined />,
       onClick: handleUploadFile,
     },
     {
-      children: "添加标签",
       type: "primary",
       icon: <TagsOutlined />,
       onClick: handleAddTag,
     },
     !isEditing
       ? {
-          children: "编辑标签",
           type: "primary",
           icon: <EditOutlined />,
           onClick: () => setIsEditing(true),
         }
       : {
-          children: "退出编辑",
           type: "primary",
           danger: true,
           icon: <EditOutlined />,
@@ -300,7 +305,6 @@ const Files = observer(() => {
       resetData();
     };
   }, []);
-
   return (
     <div className="files">
       <aside className="side-bar">
@@ -320,11 +324,12 @@ const Files = observer(() => {
         <Spin tip="Loading..." spinning={loading} style={{ height: "100%" }}>
           <FileList
             selectedTags={selectedTags}
-            files={files}
+            files={filteredFiles}
             onFileCheckChange={handleFileChecked}
             onFileDelete={handleDeleteFile}
             onFilesDelete={handleDeleteFiles}
             onFileDownload={handleDownloadFile}
+            onFilterConditionChange={handleFilterChange}
           ></FileList>
         </Spin>
         <FloatButton.Group

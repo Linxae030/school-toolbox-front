@@ -1,8 +1,11 @@
 import "./index.less";
-import { Divider, Tag } from "antd";
+import { Divider, Input, Tag } from "antd";
 import Checkbox from "antd/es/checkbox";
+import { observer } from "mobx-react-lite";
 import { IFile, TagType } from "@/apis/files/types";
 import FileCard from "../FileCard";
+import FilterButtons from "@/components/FilterButtons";
+import { FilterCondition } from "@/store/file";
 
 type IProps = {
   selectedTags: TagType[];
@@ -11,18 +14,34 @@ type IProps = {
   onFileDelete?: (_id: string) => void;
   onFilesDelete?: (ids: string[]) => void;
   onFileDownload?: (_id: string) => void;
+  onFilterConditionChange?: (condition: FilterCondition) => void;
 };
 
-const FileList = (props: IProps) => {
+const FileList = observer((props: IProps) => {
   const {
     selectedTags,
     files,
     onFileCheckChange,
     onFileDelete,
-    onFilesDelete,
     onFileDownload,
+    onFilterConditionChange,
   } = props;
   const hasTag = selectedTags.length !== 0;
+
+  const buttons = [
+    {
+      name: "文件名",
+      fieldName: "fileName",
+    },
+    {
+      name: "大小",
+      fieldName: "fileSize",
+    },
+    {
+      name: "更新时间",
+      fieldName: "updatedAt",
+    },
+  ];
 
   return (
     <div className="file-list">
@@ -44,6 +63,23 @@ const FileList = (props: IProps) => {
         dashed
         style={{ width: "100%", height: 1, borderWidth: 1, margin: "10px 0" }}
       />
+      <div className="filter">
+        <FilterButtons
+          buttons={buttons}
+          onChange={onFilterConditionChange}
+        ></FilterButtons>
+        <div className="keywords">
+          <span style={{ width: "80px" }}>关键词：</span>
+          <Input
+            onChange={(e) =>
+              onFilterConditionChange?.({
+                keywords: e.target.value,
+              })
+            }
+            placeholder="请输入关键词"
+          ></Input>
+        </div>
+      </div>
       <div className="files-area">
         <Checkbox.Group
           style={{ width: "100%" }}
@@ -61,6 +97,6 @@ const FileList = (props: IProps) => {
       </div>
     </div>
   );
-};
+});
 
 export default FileList;

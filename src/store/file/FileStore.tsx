@@ -15,7 +15,13 @@ import {
   updateTag,
   uploadFiles,
 } from "@/apis/files";
-import { handleResponse } from "@/utils";
+import { ensureArray, handleResponse } from "@/utils";
+
+export type FilterCondition = {
+  [K in keyof IFile | "keywords"]?: K extends keyof IFile
+    ? "desc" | "asc"
+    : string;
+};
 
 export default class FileStore {
   files: IFile[] = [];
@@ -26,13 +32,36 @@ export default class FileStore {
 
   selectedFileIds: string[] = [];
 
+  filterCondition: FilterCondition = {};
+
   get selectedTags() {
     return this.tags.filter((tag) => this.selectedTagIds.includes(tag._id));
+  }
+
+  get filteredFiles(): IFile[] {
+    const { keywords, ...filterProps } = this.filterCondition;
+    let filteredFiles = this.files;
+
+    if (keywords) {
+      filteredFiles = filteredFiles.filter((file) =>
+        file.fileName.includes(keywords),
+      );
+    }
+    const entries = Object.entries(filterProps);
+    if (entries.length === 0) return filteredFiles;
+    const [key, value] = entries[0];
+    filteredFiles = _.orderBy(filteredFiles, key, value);
+
+    return filteredFiles;
   }
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  setFilerCondition = (condition: FilterCondition) => {
+    this.filterCondition = condition;
+  };
 
   updateSelectedTagIds = (ids: string[]) => {
     this.selectedTagIds = ids;

@@ -1,5 +1,5 @@
 import "./index.less";
-import { Card, Avatar, Checkbox, Popconfirm } from "antd";
+import { Card, Avatar, Checkbox, Popconfirm, Flex, Tag, Tooltip } from "antd";
 import Meta from "antd/es/card/Meta";
 import {
   EditOutlined,
@@ -7,7 +7,10 @@ import {
   QuestionCircleOutlined,
   CloudDownloadOutlined,
 } from "@ant-design/icons";
+import { useCallback } from "react";
+import * as _ from "lodash";
 import { IFile } from "@/apis/files/types";
+import { bytesToSize, ellipsis, ensureArray, formatISO } from "@/utils";
 
 type IProps = {
   file: IFile;
@@ -16,11 +19,36 @@ type IProps = {
 };
 const FileCard = (props: IProps) => {
   const { file, onDelete, onDownload } = props;
-  const { fileName, fileSize, fileType, tags, _id } = file;
+  const { fileName, fileSize, fileType, tags, _id, updatedAt } = file;
+
+  const renderAvatar = () => {
+    return <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />;
+  };
+  const renderDesc = useCallback(() => {
+    return (
+      <Flex gap="4px 0" wrap="wrap" vertical>
+        <div className="size">{bytesToSize(fileSize)}</div>
+        <div className="update-time">{formatISO(updatedAt)}</div>
+        <div className="tags">
+          {ensureArray(tags).map((tag) => (
+            <Tag color="magenta" key={tag._id}>
+              {tag.name}
+            </Tag>
+          ))}
+        </div>
+      </Flex>
+    );
+  }, [tags]);
+
+  const renderTitle = () => {
+    const title = ellipsis(fileName, 15);
+    return <Tooltip title={fileName}>{title}</Tooltip>;
+  };
+
   return (
     <div className="file-card">
       <Card
-        style={{ width: 200, marginTop: 16 }}
+        style={{ width: "100%", marginTop: 16 }}
         actions={[
           <EditOutlined key="edit" />,
           <Popconfirm
@@ -49,11 +77,9 @@ const FileCard = (props: IProps) => {
         ]}
       >
         <Meta
-          avatar={
-            <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
-          }
-          title={fileName}
-          description="This is the description"
+          avatar={renderAvatar()}
+          title={renderTitle()}
+          description={renderDesc()}
         />
       </Card>
     </div>
