@@ -144,3 +144,12 @@ export function bytesToSize(size: number | string) {
 
   return size;
 }
+
+/** 提取文件后缀 */
+export function extractFileExtension(filename: string): string {
+  const lastDotIndex = filename.lastIndexOf(".");
+  if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
+    return ""; // 没有找到后缀或者文件名以点结尾，返回空字符串
+  }
+  return filename.substring(lastDotIndex + 1);
+}

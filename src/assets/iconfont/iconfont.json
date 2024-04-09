@@ -6,6 +6,132 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "39666835",
+      "name": "JPEG",
+      "font_class": "JPEG",
+      "unicode": "e97f",
+      "unicode_decimal": 59775
+    },
+    {
+      "icon_id": "39666839",
+      "name": "JSON",
+      "font_class": "JSON",
+      "unicode": "e980",
+      "unicode_decimal": 59776
+    },
+    {
+      "icon_id": "39666840",
+      "name": "JPG",
+      "font_class": "JPG",
+      "unicode": "e981",
+      "unicode_decimal": 59777
+    },
+    {
+      "icon_id": "39666841",
+      "name": "DOCX",
+      "font_class": "DOCX",
+      "unicode": "e982",
+      "unicode_decimal": 59778
+    },
+    {
+      "icon_id": "39666842",
+      "name": "DOX",
+      "font_class": "DOX",
+      "unicode": "e983",
+      "unicode_decimal": 59779
+    },
+    {
+      "icon_id": "39666843",
+      "name": "PPT",
+      "font_class": "PPT",
+      "unicode": "e984",
+      "unicode_decimal": 59780
+    },
+    {
+      "icon_id": "39666844",
+      "name": "MP3",
+      "font_class": "MP3",
+      "unicode": "e985",
+      "unicode_decimal": 59781
+    },
+    {
+      "icon_id": "39666845",
+      "name": "OGG",
+      "font_class": "OGG",
+      "unicode": "e986",
+      "unicode_decimal": 59782
+    },
+    {
+      "icon_id": "39666846",
+      "name": "PNG",
+      "font_class": "PNG",
+      "unicode": "e987",
+      "unicode_decimal": 59783
+    },
+    {
+      "icon_id": "39666847",
+      "name": "MP4",
+      "font_class": "MP4",
+      "unicode": "e988",
+      "unicode_decimal": 59784
+    },
+    {
+      "icon_id": "39666848",
+      "name": "SVG",
+      "font_class": "SVG",
+      "unicode": "e989",
+      "unicode_decimal": 59785
+    },
+    {
+      "icon_id": "39666849",
+      "name": "PPTX",
+      "font_class": "PPTX",
+      "unicode": "e98a",
+      "unicode_decimal": 59786
+    },
+    {
+      "icon_id": "39666854",
+      "name": "WAV",
+      "font_class": "WAV",
+      "unicode": "e98b",
+      "unicode_decimal": 59787
+    },
+    {
+      "icon_id": "39666856",
+      "name": "XLSX",
+      "font_class": "XLSX",
+      "unicode": "e98c",
+      "unicode_decimal": 59788
+    },
+    {
+      "icon_id": "39666857",
+      "name": "ZIP",
+      "font_class": "ZIP",
+      "unicode": "e98d",
+      "unicode_decimal": 59789
+    },
+    {
+      "icon_id": "39666858",
+      "name": "RAR",
+      "font_class": "RAR",
+      "unicode": "e98e",
+      "unicode_decimal": 59790
+    },
+    {
+      "icon_id": "39666860",
+      "name": "XLS",
+      "font_class": "XLS",
+      "unicode": "e98f",
+      "unicode_decimal": 59791
+    },
+    {
+      "icon_id": "39666861",
+      "name": "PDF",
+      "font_class": "PDF",
+      "unicode": "e990",
+      "unicode_decimal": 59792
+    },
+    {
       "icon_id": "17947390",
       "name": "添加",
       "font_class": "tianjia",

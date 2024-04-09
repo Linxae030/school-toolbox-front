@@ -15,6 +15,7 @@ type IProps = {
   onFilesDelete?: (ids: string[]) => void;
   onFileDownload?: (_id: string) => void;
   onFilterConditionChange?: (condition: FilterCondition) => void;
+  onFileEdit?: (_id: string, fileName: string, tags: TagType[]) => void;
 };
 
 const FileList = observer((props: IProps) => {
@@ -25,6 +26,7 @@ const FileList = observer((props: IProps) => {
     onFileDelete,
     onFileDownload,
     onFilterConditionChange,
+    onFileEdit,
   } = props;
   const hasTag = selectedTags.length !== 0;
 
@@ -91,6 +93,7 @@ const FileList = observer((props: IProps) => {
               file={file}
               onDelete={onFileDelete}
               onDownload={onFileDownload}
+              onEdit={onFileEdit}
             ></FileCard>
           ))}
         </Checkbox.Group>

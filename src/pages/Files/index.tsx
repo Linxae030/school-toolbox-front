@@ -34,11 +34,16 @@ import FileList from "./FileList";
 import ButtonGroup, { GroupButtonItem } from "@/components/ButtonGroup";
 import useStore from "@/store";
 import { useFormModal } from "@/components/Modal";
-import { handleResponse, waitAndRefreshPage } from "@/utils";
+import {
+  extractFileExtension,
+  handleResponse,
+  waitAndRefreshPage,
+} from "@/utils";
 import { checkFileUnique } from "@/apis/files";
 import UniqueUpload from "@/components/UniqueUpload";
 import FilterButton from "@/components/FilterButtons";
 import { FilterCondition } from "@/store/file";
+import { TagType } from "@/apis/files/types";
 
 type TagAddFormType = {
   name: string;
@@ -47,6 +52,11 @@ type TagAddFormType = {
 type UploadFileFormType = {
   tags: string[];
   files: UploadFile[];
+};
+
+type EditFileFormType = {
+  tags: string[];
+  fileName: string;
 };
 
 type DownloadFilesFormType = {
@@ -79,6 +89,7 @@ const Files = observer(() => {
     deleteFilesOpr,
     downloadFileOpr,
     downloadFilesOpr,
+    updateFileOpr,
   } = fileStore;
 
   const [isEditing, setIsEditing] = useState(false);
@@ -124,7 +135,7 @@ const Files = observer(() => {
         <Form.Item
           label="文件标签"
           name="tags"
-          rules={[{ required: true, message: "请选择标签" }]}
+          rules={[{ required: true, message: "至少选择一个标签" }]}
         >
           <Select
             mode="multiple"
@@ -142,6 +153,42 @@ const Files = observer(() => {
           rules={[{ required: true, message: "请选择文件" }]}
         >
           <UniqueUpload />
+        </Form.Item>
+      </Form>
+    );
+  };
+
+  const renderEditFileForm = () => {
+    const options: SelectProps["options"] = tags?.map((tag) => ({
+      label: tag.name,
+      value: tag._id,
+    }));
+
+    return (
+      <Form
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+      >
+        <Form.Item
+          label="文件名"
+          name="fileName"
+          rules={[{ required: true, message: "请输入文件名" }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="文件标签"
+          name="tags"
+          rules={[{ required: true, message: "至少选择一个标签" }]}
+        >
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: "100%" }}
+            placeholder="请选择文件标签"
+            options={options}
+          />
         </Form.Item>
       </Form>
     );
@@ -268,8 +315,34 @@ const Files = observer(() => {
   };
 
   const handleFilterChange = (condition: FilterCondition) => {
-    console.log("condition", condition);
     setFilerCondition(condition);
+  };
+
+  const handleEditFile = (
+    _id: string,
+    fileOriginName: string,
+    tags: TagType[],
+  ) => {
+    formModalHandler.open<EditFileFormType>({
+      modalProps: {
+        title: "编辑文件",
+        okText: "保存",
+        cancelText: "取消",
+        async onOk({ tags, fileName }) {
+          await updateFileOpr(
+            _id,
+            `${fileName.trim()}.${extractFileExtension(fileOriginName)}`,
+            tags,
+          );
+          await waitAndRefreshPage(navigate, 0.5);
+        },
+      },
+      formChildren: renderEditFileForm(),
+      initialValue: {
+        fileName: fileOriginName.split(".").slice(0, -1).join("."),
+        tags: tags.map((tag) => tag._id),
+      },
+    });
   };
 
   const operationButtons: GroupButtonItem[] = _.compact([
@@ -330,6 +403,7 @@ const Files = observer(() => {
             onFilesDelete={handleDeleteFiles}
             onFileDownload={handleDownloadFile}
             onFilterConditionChange={handleFilterChange}
+            onFileEdit={handleEditFile}
           ></FileList>
         </Spin>
         <FloatButton.Group

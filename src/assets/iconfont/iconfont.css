@@ -1,8 +1,8 @@
 @font-face {
   font-family: iconfont; /* Project id 4433166 */
-  src: url('iconfont.woff2?t=1707230559943') format('woff2'),
-       url('iconfont.woff?t=1707230559943') format('woff'),
-       url('iconfont.ttf?t=1707230559943') format('truetype');
+  src: url('iconfont.woff2?t=1712655985143') format('woff2'),
+       url('iconfont.woff?t=1712655985143') format('woff'),
+       url('iconfont.ttf?t=1712655985143') format('truetype');
 }
 
 .iconfont {
@@ -11,7 +11,78 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  vertical-align:middle;
+}
+
+.icon-JPEG::before {
+  content: "\e97f";
+}
+
+.icon-JSON::before {
+  content: "\e980";
+}
+
+.icon-JPG::before {
+  content: "\e981";
+}
+
+.icon-DOCX::before {
+  content: "\e982";
+}
+
+.icon-DOX::before {
+  content: "\e983";
+}
+
+.icon-PPT::before {
+  content: "\e984";
+}
+
+.icon-MP3::before {
+  content: "\e985";
+}
+
+.icon-OGG::before {
+  content: "\e986";
+}
+
+.icon-PNG::before {
+  content: "\e987";
+}
+
+.icon-MP4::before {
+  content: "\e988";
+}
+
+.icon-SVG::before {
+  content: "\e989";
+}
+
+.icon-PPTX::before {
+  content: "\e98a";
+}
+
+.icon-WAV::before {
+  content: "\e98b";
+}
+
+.icon-XLSX::before {
+  content: "\e98c";
+}
+
+.icon-ZIP::before {
+  content: "\e98d";
+}
+
+.icon-RAR::before {
+  content: "\e98e";
+}
+
+.icon-XLS::before {
+  content: "\e98f";
+}
+
+.icon-PDF::before {
+  content: "\e990";
 }
 
 .icon-tianjia::before {

@@ -12,6 +12,7 @@ import {
   findAllTags,
   findFile,
   findFiles,
+  updateFile,
   updateTag,
   uploadFiles,
 } from "@/apis/files";
@@ -199,6 +200,20 @@ export default class FileStore {
 
   downloadFilesOpr = async (ids: string[], zipName: string) => {
     await downloadFiles(ids, zipName);
+  };
+
+  updateFileOpr = async (_id: string, fileName: string, tags: string[]) => {
+    const res = await updateFile(_id, fileName, tags);
+    handleResponse(
+      res,
+      (res) => {
+        message.success(res.msg);
+      },
+      (res) => {
+        const { ret } = res;
+        message.error(ret);
+      },
+    );
   };
 
   resetData = () => {

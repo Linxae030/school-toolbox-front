@@ -103,3 +103,13 @@ export const checkFileUnique = (fileNames: string[]) => {
     },
   });
 };
+
+export const updateFile = (_id: string, fileName: string, tags: string[]) => {
+  return LinRequest.post("file/updateFile", {
+    data: {
+      _id,
+      fileName,
+      tags,
+    },
+  });
+};

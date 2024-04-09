@@ -9,20 +9,47 @@ import {
 } from "@ant-design/icons";
 import { useCallback } from "react";
 import * as _ from "lodash";
-import { IFile } from "@/apis/files/types";
-import { bytesToSize, ellipsis, ensureArray, formatISO } from "@/utils";
+import * as cx from "classnames";
+import { IFile, TagType } from "@/apis/files/types";
+import {
+  bytesToSize,
+  ellipsis,
+  ensureArray,
+  extractFileExtension,
+  formatISO,
+  ICON_CLASSNAMES_MAP,
+  iconfontCx,
+} from "@/utils";
 
 type IProps = {
   file: IFile;
   onDelete?: (_id: string) => void;
   onDownload?: (_id: string) => void;
+  onEdit?: (_id: string, fileName: string, tags: TagType[]) => void;
 };
 const FileCard = (props: IProps) => {
-  const { file, onDelete, onDownload } = props;
+  const { file, onDelete, onDownload, onEdit } = props;
   const { fileName, fileSize, fileType, tags, _id, updatedAt } = file;
 
   const renderAvatar = () => {
-    return <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />;
+    const suffix = extractFileExtension(fileName);
+    const hasKey = Object.keys(ICON_CLASSNAMES_MAP).some(
+      (key) => key === suffix,
+    );
+    // @ts-expect-error 666
+    const href = hasKey ? ICON_CLASSNAMES_MAP[suffix] : "weizhigeshi";
+
+    return (
+      <svg
+        className="icon"
+        aria-hidden="true"
+        style={{
+          fontSize: 50,
+        }}
+      >
+        <use xlinkHref={`#icon-${href}`}></use>
+      </svg>
+    );
   };
   const renderDesc = useCallback(() => {
     return (
@@ -50,7 +77,10 @@ const FileCard = (props: IProps) => {
       <Card
         style={{ width: "100%", marginTop: 16 }}
         actions={[
-          <EditOutlined key="edit" />,
+          <EditOutlined
+            key="edit"
+            onClick={() => onEdit?.(_id, fileName, tags)}
+          />,
           <Popconfirm
             key="delete"
             title="下载文件"
