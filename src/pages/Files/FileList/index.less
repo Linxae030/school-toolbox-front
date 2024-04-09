@@ -10,21 +10,28 @@
   }
 
   .files-area {
-    display: grid;
     overflow: auto;
-    height: 83%;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-template-rows: repeat(auto-fill, minmax(180px, 1fr));
+    padding: 5px;
+    height: 80%;
+
+
+    .group {
+      display: grid;
+      justify-content: space-between;
+      grid-template-columns: repeat(auto-fit, 250px);
+      grid-template-rows: repeat(auto-fill, minmax(180px, 1fr));
+    }
   }
 
   .filter {
     display: flex;
     justify-content: space-between;
+    padding: 0 5px;
 
     .keywords {
       display: flex;
       align-items: center;
-      width: 20%;
+      width: 22%;
     }
   }
 }

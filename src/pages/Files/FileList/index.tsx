@@ -83,10 +83,7 @@ const FileList = observer((props: IProps) => {
         </div>
       </div>
       <div className="files-area">
-        <Checkbox.Group
-          style={{ width: "100%" }}
-          onChange={onFileCheckChange as any}
-        >
+        <Checkbox.Group className="group" onChange={onFileCheckChange as any}>
           {files.map((file) => (
             <FileCard
               key={file._id}
