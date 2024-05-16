@@ -31,6 +31,7 @@ export const checkTimeConflict = (newCourse: Course, courses: Course[]) => {
     const end1 = newCourse.end;
     const start2 = existingObject.start;
     const end2 = existingObject.end;
+    if (newCourse._id === existingObject._id) continue;
 
     if (start1[0] < end2[0] && end1[0] > start2[0]) {
       // 时间段重叠，存在冲突

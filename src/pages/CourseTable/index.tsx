@@ -177,7 +177,10 @@ const CourseTable = observer(() => {
     course: Course,
     dataIndex: keyof WeekCourses,
   ) => {
-    const res = checkTimeConflict(course, ensureArray(courseInfo[dataIndex]));
+    const res = checkTimeConflict(
+      { ...course, _id: courseId },
+      ensureArray(courseInfo[dataIndex]),
+    );
     if (res) {
       message.error("课程时间存在冲突, 请重新选择时间");
     } else {

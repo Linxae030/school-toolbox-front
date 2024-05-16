@@ -36,7 +36,8 @@ module.exports = {
     "no-empty": "off",
     "react-hooks/exhaustive-deps":"off",
     "consistent-return": "off",
-    "no-restricted-syntax":"off"
+    "no-restricted-syntax":"off",
+    "no-continue":"off"
   },
 };
 

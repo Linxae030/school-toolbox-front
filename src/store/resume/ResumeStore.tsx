@@ -313,9 +313,6 @@ export default class ResumeStore {
       // height = 14400;
       width *= ratio;
     }
-    console.log("contentWidth", contentWidth);
-    console.log("leftHeight", leftHeight, pageHeight);
-    console.log("ele", ele?.clientWidth);
 
     // 缩放为 a4 大小 pdf.internal.pageSize 获取当前pdf设定的宽高
     height = (height * pdf.internal.pageSize.getWidth()) / width;

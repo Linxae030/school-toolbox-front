@@ -51,8 +51,8 @@ export default class AxiosApi {
         return res.data;
       },
       (err) => {
-        const receivedData = err.response.data;
-        const { code, status } = receivedData;
+        const receivedData = err.response?.data;
+        const { code, status } = receivedData ?? {};
         console.log("err", err);
         if (code === 0 && status === 401) {
           removeLocalStorageItem(TOKEN_NAME_IN_LOCAL);

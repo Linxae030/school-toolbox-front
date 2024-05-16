@@ -20,6 +20,7 @@ const CourseCard: React.FC<IProps> = observer((props) => {
   const { course, onEdit, onDelete } = props;
   const { start, end, classroom, courseName, teacher, day, weekRange, _id } =
     course;
+  console.log("weekRange", weekRange);
   const format = "HH:mm";
   const formModalHandler = useFormModal();
 
@@ -165,6 +166,7 @@ const CourseCard: React.FC<IProps> = observer((props) => {
         teacher,
         classroom,
         time: [formatTime(start), formatTime(end)],
+        weekRange,
       },
     });
   };
